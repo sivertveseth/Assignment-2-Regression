@@ -27,11 +27,9 @@ Her kan det være greit at vi legger inn litt om oppgaveteksten, se link https:/
 
 **Introduksjon**: *Beskrive kort oppgåven/hensikten med denne delen av oppgåven slik som over. Bestemme dei to variablene vi ønsker å se på, og presentere spørsmålet mellom dei to variablene i datasettet `hypertrofi`. Kanskje vi skal kort nevne at vi vil diskutere standardfeilen, t-verdien og p-verdien knytt til regresjonstabellen som vi har laget.*
 
-Ønsker å se på variablene FAST_NUCLEI_T1 (Myonuclei per fiber CSA in Type II) og AGE (alder).
+Ønsker å se på variablene FAST_NUCLEI_T1 (Myonuclei per fiber CSA in Type II) og TRAINING_AGE (treningalder).
 
-* **Spørsmålet**: Ser man en endring i myonuklei per fiber CSA i type 2 ved økende alder?
-  + <u>Alternativ hypotese</u>: Det ses en endring i myonuclei per fiber CSA i type 2 ved økende alder.
-  + <u>Null hypoteste</u>: Det er en ingen endring i myonuclei per fiber CSA i type 2 ved økende alder. 
+**Spørsmålet**: Er det et lineært forhold mellom myonuclei per fiber CSA i type 2 og treningsalder? 
 
 
 
