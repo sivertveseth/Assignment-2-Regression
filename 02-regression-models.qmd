@@ -7,8 +7,8 @@ format: html
 
 Her kan det være greit at vi legger inn litt om oppgaveteksten, se link https://dhammarstrom.github.io/quant-methods-workshops/assignment-2.html eller READMe.md.
 
-
 ## Del 1: Laktat terskler
+
 *Kort introduksjon av denne delen av oppgaven. Legge kort frem korleis vi kan kalkulere laktatterskel (benytt kanskje [Machado](https://www.tandfonline.com/doi/abs/10.1080/02640414.2012.702424) og kvifor dette kan være gunstig.*
 
 **Metode**: *Her må også koden og utregningen for laktatterskelen komme frem, samt korleis vi regnet ut reliabiliteten mellom to terskler (typical error som en prosent av gj.snittet, se [Hopkins](https://link-springer-com.ezproxy.inn.no/article/10.2165/00007256-200030010-00001).Siden vi ikkje gjorde terskeltesting, så tenker eg at vi kan ta utgangspunkt i `exscidata` pakken, se filen laktatprofil-g2.xlsx for data.*
@@ -19,13 +19,24 @@ Her kan det være greit at vi legger inn litt om oppgaveteksten, se link https:/
 
 **Introduksjon**: *Samme som over - kort om kva arbeid vi gjorde på molekylærelab og hensikt, se pdf-fil DNA-ekstraksjon gruppe 2. Her må vi også bestemme oss for kva vi velger å fokusere på: DNA-fragmentene eller qPCR resultatene. Legge også kort til her kva informasjon dette gir oss: enten DNA vs qPCR.*
 
-**Metode**: *Om vi velger å analysere DNA-fragmentene så tenker eg vi følger linket veileder i oppgåveteksten, se [her](https://trainome.github.io/protocols/sw_pcr_size_determination.html). Her må vi også inkludere koden for korleis man kom frem til dei predikerte størrelsene.*
-*Velger vi derimot å se på helningen på kalibreringskurven, må vi bruke innsamlet data til å beregne reaksjonseffektiviteten.*
+**Metode**: *Om vi velger å analysere DNA-fragmentene så tenker eg vi følger linket veileder i oppgåveteksten, se [her](https://trainome.github.io/protocols/sw_pcr_size_determination.html). Her må vi også inkludere koden for korleis man kom frem til dei predikerte størrelsene.* *Velger vi derimot å se på helningen på kalibreringskurven, må vi bruke innsamlet data til å beregne reaksjonseffektiviteten.*
 
 **Diskusjon**: *Vise frem resultatene og snakke kva dei betyr og gir oss av informasjon. Her kan vi ogs ta med diskusjonen/konklusjonen vår fra lab-rapporten vår.*
 
 ## Del 3: Tolkning av regresjonsmodell
+
 **Introduksjon**: *Beskrive kort oppgåven/hensikten med denne delen av oppgåven slik som over. Bestemme dei to variablene vi ønsker å se på, og presentere spørsmålet mellom dei to variablene i datasettet `hypertrofi`. Kanskje vi skal kort nevne at vi vil diskutere standardfeilen, t-verdien og p-verdien knytt til regresjonstabellen som vi har laget.*
+
+Ønsker å se på variablene FAST_NUCLEI_T1 (Myonuclei per fiber CSA in Type II) og AGE (alder).
+
+* **Spørsmålet**: Ser man en endring i myonuklei per fiber CSA i type 2 ved økende alder?
+  + <u>Alternativ hypotese</u>: Det ses en endring i myonuclei per fiber CSA i type 2 ved økende alder.
+  + <u>Null hypoteste</u>: Det er en ingen endring i myonuclei per fiber CSA i type 2 ved økende alder. 
+
+
+
+
+
 
 **Metode**: *Vise og forklare fremgangsmåte i flytende tekst (unngå stikkord/punktliste). Legge til koden og vise frem tabellen med.*
 
