@@ -1,8 +1,34 @@
-# Assignment 2: Regression models, predicting from data  {#assignment2}
+---
+title: "Assignment 2: Regression models, predicting from data"
+format: html
+---
+
+## Introduksjon / Bakgrunn
+
+Her kan det være greit at vi legger inn litt om oppgaveteksten, se link https://dhammarstrom.github.io/quant-methods-workshops/assignment-2.html eller READMe.md.
 
 
-The assignment has three parts:
+## Del 1: Laktat terskler
+*Kort introduksjon av denne delen av oppgaven. Legge kort frem korleis vi kan kalkulere laktatterskel (benytt kanskje [Machado](https://www.tandfonline.com/doi/abs/10.1080/02640414.2012.702424) og kvifor dette kan være gunstig.*
 
-- Part 1: Lactate thresholds
-- Part 2: Predicting sizes of DNA fragments
-- Part 3: Interpreting a regression table
+**Metode**: *Her må også koden og utregningen for laktatterskelen komme frem, samt korleis vi regnet ut reliabiliteten mellom to terskler (typical error som en prosent av gj.snittet, se [Hopkins](https://link-springer-com.ezproxy.inn.no/article/10.2165/00007256-200030010-00001).Siden vi ikkje gjorde terskeltesting, så tenker eg at vi kan ta utgangspunkt i `exscidata` pakken, se filen laktatprofil-g2.xlsx for data.*
+
+**Diskusjon**: *Viktig at vi visualiserer det med tabell og graf.Snakke om kva resultatene sier oss og kva nytte dei kan gi oss*
+
+## Del 2: Forutsi størrelser på DNA fragmenter eller stiningene i en qPCR-kalibreringskurve
+
+**Introduksjon**: *Samme som over - kort om kva arbeid vi gjorde på molekylærelab og hensikt, se pdf-fil DNA-ekstraksjon gruppe 2. Her må vi også bestemme oss for kva vi velger å fokusere på: DNA-fragmentene eller qPCR resultatene. Legge også kort til her kva informasjon dette gir oss: enten DNA vs qPCR.*
+
+**Metode**: *Om vi velger å analysere DNA-fragmentene så tenker eg vi følger linket veileder i oppgåveteksten, se [her](https://trainome.github.io/protocols/sw_pcr_size_determination.html). Her må vi også inkludere koden for korleis man kom frem til dei predikerte størrelsene.*
+*Velger vi derimot å se på helningen på kalibreringskurven, må vi bruke innsamlet data til å beregne reaksjonseffektiviteten.*
+
+**Diskusjon**: *Vise frem resultatene og snakke kva dei betyr og gir oss av informasjon. Her kan vi ogs ta med diskusjonen/konklusjonen vår fra lab-rapporten vår.*
+
+## Del 3: Tolkning av regresjonsmodell
+**Introduksjon**: *Beskrive kort oppgåven/hensikten med denne delen av oppgåven slik som over. Bestemme dei to variablene vi ønsker å se på, og presentere spørsmålet mellom dei to variablene i datasettet `hypertrofi`. Kanskje vi skal kort nevne at vi vil diskutere standardfeilen, t-verdien og p-verdien knytt til regresjonstabellen som vi har laget.*
+
+**Metode**: *Vise og forklare fremgangsmåte i flytende tekst (unngå stikkord/punktliste). Legge til koden og vise frem tabellen med.*
+
+**Diskusjon**: *Her kommer beskrivelsen og forklaring av standardfeilen, t-verdien og p-verdien som vi har funnet. Her benytter vi oss av pensum (Frigessi and Aalen 2018), (Campbell, Walters, and Machin 2020) og (Spiegelhalter 2019, kap 5).*
+
+*Tenker det også viktig å få inn svar på spørsmålene: "Korleis definerer og tolker man p-verdien i regresjonstabellen vår? Kva betyr den?*
