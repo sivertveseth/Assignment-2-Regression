@@ -34,7 +34,7 @@ model_summary <- coef(summary(mod1))
 regression_table <- data.frame(
   term = c("Intercept (Constant)", "Training Experience (Years)"),
   t.value = round(model_summary[, "t value"], 3),
-  p.value = if.else(model_summary[, "Pr(>|t|)"] < 0.001, "< 0.001", round(model_summary[, "Pr(>|t|)"], 3)),
+  p.value = ifelse(model_summary[, "Pr(>|t|)"] < 0.001, "< 0.001", round(model_summary[, "Pr(>|t|)"], 3)),
   std.error = round(model_summary[, "Std. Error"], 3)
 ) %>%
   tibble() %>%

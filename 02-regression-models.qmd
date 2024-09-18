@@ -31,11 +31,6 @@ Her kan det være greit at vi legger inn litt om oppgaveteksten, se link https:/
 
 **Spørsmålet**: Er det et lineært forhold mellom myonuclei per fiber CSA i type 2 og treningsalder? 
 
-
-
-
-
-
 **Metode**: *Vise og forklare fremgangsmåte i flytende tekst (unngå stikkord/punktliste). Legge til koden og vise frem tabellen med.*
 
 **Diskusjon**: *Her kommer beskrivelsen og forklaring av standardfeilen, t-verdien og p-verdien som vi har funnet. Her benytter vi oss av pensum (Frigessi and Aalen 2018), (Campbell, Walters, and Machin 2020) og (Spiegelhalter 2019, kap 5).*
