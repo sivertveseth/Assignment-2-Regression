@@ -1,6 +1,10 @@
 ---
 title: "Assignment 2: Regression models, predicting from data"
-format: html
+format: 
+  html:
+    code-fold: true
+execute:
+  warning: false  # Skjuler varselmeldinger
 ---
 
 ## Introduksjon / Bakgrunn
@@ -15,6 +19,7 @@ Her kan det være greit at vi legger inn litt om oppgaveteksten, se link https:/
 
 **Diskusjon**: *Viktig at vi visualiserer det med tabell og graf.Snakke om kva resultatene sier oss og kva nytte dei kan gi oss*
 
+
 ## Del 2: Forutsi størrelser på DNA fragmenter eller stiningene i en qPCR-kalibreringskurve
 
 **Introduksjon**: *Samme som over - kort om kva arbeid vi gjorde på molekylærelab og hensikt, se pdf-fil DNA-ekstraksjon gruppe 2. Her må vi også bestemme oss for kva vi velger å fokusere på: DNA-fragmentene eller qPCR resultatene. Legge også kort til her kva informasjon dette gir oss: enten DNA vs qPCR.*
@@ -23,15 +28,47 @@ Her kan det være greit at vi legger inn litt om oppgaveteksten, se link https:/
 
 **Diskusjon**: *Vise frem resultatene og snakke kva dei betyr og gir oss av informasjon. Her kan vi ogs ta med diskusjonen/konklusjonen vår fra lab-rapporten vår.*
 
+
 ## Del 3: Tolkning av regresjonsmodell
 
 **Introduksjon**: *Beskrive kort oppgåven/hensikten med denne delen av oppgåven slik som over. Bestemme dei to variablene vi ønsker å se på, og presentere spørsmålet mellom dei to variablene i datasettet `hypertrofi`. Kanskje vi skal kort nevne at vi vil diskutere standardfeilen, t-verdien og p-verdien knytt til regresjonstabellen som vi har laget.*
 
-Ønsker å se på variablene FAST_NUCLEI_T1 (Myonuclei per fiber CSA in Type II) og TRAINING_AGE (treningalder).
+
+I denne delen av oppgaven har vi valgt å se nærmere på variablene FAST_NUCLEI_T1 og TRAINING_AGE i datasettet `hypertrofi`, som er en del av `exscidata` pakken. For utforming av tabeller, figurer og grafer bruker vi `tidyverse` og `gt`.
+
+```{r}
+# Laster inn nødvendige biblioteker
+library(exscidata)
+library(tidyverse)
+library(gt)
+```
+
+I `?hypertrofi` er FAST_NUCLEI_T1 beskrevet som antall myonuclei per type-II muskelfiber, mens TRAINING_AGE viser til antall år med tidligere treningserfaring. Antall myonuclei per type-II muskelfiber, kan ha noko å si om muskelens egenskap til å utvikle kraft og personers styrke (sett inn ref rfa McArdle & Catch kap 22). Det er også diskutert om trening kan føre til endringer i muskelfiber type eller om de genetiske faktorene er det som er avgjørende for muskelfiber type fordelingen til den enkelte (ref, McArdle & Catch s.535). Vi ønsker derfor å se nærmer om det er en lineær sammenheng mellom FAST_NUCLEI_T1 og TRAINING_AGE i datasettet `hypertrofi`.   
+
 
 **Spørsmålet**: Er det et lineært forhold mellom myonuclei per fiber CSA i type 2 og treningsalder? 
 
-**Metode**: *Vise og forklare fremgangsmåte i flytende tekst (unngå stikkord/punktliste). Legge til koden og vise frem tabellen med.*
+**Metode**: *Vise og forklare fremgangsmåte i flytende tekst (unngå stikkord/punktliste). Legge til koden og vise frem regresjonstabellen*
+
+Under i **Graf \@ref(fig:plot-training-age-myonuclei)** er FAST_NUCLEI_T1 satt som den avhengige variabelen på y-aksen, mens TRAINING_AGE er valgt som den uavhengige variabelen på x-aksen. Grafen er ment for å gi oss et raskt overblikk av dataene. Umiddelbart så kan man se at det er et stort sprik mellom punktene, og at stigningen på den rette linjen har en liten negativt stiningstall, men er ganske nær null. Dette gir oss en viss indikasjon på at det ikke/er lite lineær sammenheng mellom variablene (en ref?).
+
+```{r plot-training-age-myonuclei, fig.cap="Graf 1: Sammenheng mellom treningalder og myonuclei per fiber CSA i Type-II"}
+# Laster inn data
+data("hypertrophy")
+
+## Et enkelt plot for å se sammenhenger
+hypertrophy %>% 
+  select(PARTICIPANT, GROUP, TRAINING_AGE, FAST_NUCLEI_T1) %>% 
+    ggplot(aes(TRAINING_AGE, FAST_NUCLEI_T1)) +
+  geom_point(size = 2,
+             fill = "red",
+             shape = 19) +
+        labs(x = "Trenings\u00E5r", 
+             y = "Myonucklei per fiber CSA i Type II") +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+
 
 **Diskusjon**: *Her kommer beskrivelsen og forklaring av standardfeilen, t-verdien og p-verdien som vi har funnet. Her benytter vi oss av pensum (Frigessi and Aalen 2018), (Campbell, Walters, and Machin 2020) og (Spiegelhalter 2019, kap 5).*
 

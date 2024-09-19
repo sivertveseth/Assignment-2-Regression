@@ -27,6 +27,9 @@ ds <- hypertrophy %>%
 # Lager lineær modell med ds
 mod1 <- lm(fast_nuclei_per_fiber ~ training_experience_years, data = ds)
 
+# Summary av den lineære modellen 
+summary(mod1)
+
 # Henter ut koeffisienter og deres statistikker
 model_summary <- coef(summary(mod1))
 

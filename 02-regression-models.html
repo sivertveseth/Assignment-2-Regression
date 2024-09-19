@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -81,9 +115,46 @@ ul.task-list li input[type="checkbox"] {
 <section id="del-3-tolkning-av-regresjonsmodell" class="level2">
 <h2 class="anchored" data-anchor-id="del-3-tolkning-av-regresjonsmodell">Del 3: Tolkning av regresjonsmodell</h2>
 <p><strong>Introduksjon</strong>: <em>Beskrive kort oppgåven/hensikten med denne delen av oppgåven slik som over. Bestemme dei to variablene vi ønsker å se på, og presentere spørsmålet mellom dei to variablene i datasettet <code>hypertrofi</code>. Kanskje vi skal kort nevne at vi vil diskutere standardfeilen, t-verdien og p-verdien knytt til regresjonstabellen som vi har laget.</em></p>
-<p>Ønsker å se på variablene FAST_NUCLEI_T1 (Myonuclei per fiber CSA in Type II) og TRAINING_AGE (treningalder).</p>
+<p>I denne delen av oppgaven har vi valgt å se nærmere på variablene FAST_NUCLEI_T1 og TRAINING_AGE i datasettet <code>hypertrofi</code>, som er en del av <code>exscidata</code> pakken. For utforming av tabeller, figurer og grafer bruker vi <code>tidyverse</code> og <code>gt</code>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Laster inn nødvendige biblioteker</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(exscidata)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>I <code>?hypertrofi</code> er FAST_NUCLEI_T1 beskrevet som antall myonuclei per type-II muskelfiber, mens TRAINING_AGE viser til antall år med tidligere treningserfaring. Antall myonuclei per type-II muskelfiber, kan ha noko å si om muskelens egenskap til å utvikle kraft og personers styrke (sett inn ref rfa McArdle &amp; Catch kap 22). Det er også diskutert om trening kan føre til endringer i muskelfiber type eller om de genetiske faktorene er det som er avgjørende for muskelfiber type fordelingen til den enkelte (ref, McArdle &amp; Catch s.535). Vi ønsker derfor å se nærmer om det er en lineær sammenheng mellom FAST_NUCLEI_T1 og TRAINING_AGE i datasettet <code>hypertrofi</code>.</p>
 <p><strong>Spørsmålet</strong>: Er det et lineært forhold mellom myonuclei per fiber CSA i type 2 og treningsalder?</p>
-<p><strong>Metode</strong>: <em>Vise og forklare fremgangsmåte i flytende tekst (unngå stikkord/punktliste). Legge til koden og vise frem tabellen med.</em></p>
+<p><strong>Metode</strong>: <em>Vise og forklare fremgangsmåte i flytende tekst (unngå stikkord/punktliste). Legge til koden og vise frem regresjonstabellen</em></p>
+<p>Under i <strong>Graf @ref(fig:plot-training-age-myonuclei)</strong> er FAST_NUCLEI_T1 satt som den avhengige variabelen på y-aksen, mens TRAINING_AGE er valgt som den uavhengige variabelen på x-aksen. Grafen er ment for å gi oss et raskt overblikk av dataene. Umiddelbart så kan man se at det er et stort sprik mellom punktene, og at stigningen på den rette linjen har en liten negativt stiningstall, men er ganske nær null. Dette gir oss en viss indikasjon på at det ikke/er lite lineær sammenheng mellom variablene (en ref?).</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Laster inn data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"hypertrophy"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Et enkelt plot for å se sammenhenger</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>hypertrophy <span class="sc">%&gt;%</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PARTICIPANT, GROUP, TRAINING_AGE, FAST_NUCLEI_T1) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(TRAINING_AGE, FAST_NUCLEI_T1)) <span class="sc">+</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill =</span> <span class="st">"red"</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape =</span> <span class="dv">19</span>) <span class="sc">+</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Trenings\u00E5r"</span>, </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="st">"Myonucklei per fiber CSA i Type II"</span>) <span class="sc">+</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="02-regression-models_files/figure-html/plot-training-age-myonuclei-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Graf 1: Sammenheng mellom treningalder og myonuclei per fiber CSA i Type-II</figcaption>
+</figure>
+</div>
+</div>
+</div>
 <p><strong>Diskusjon</strong>: <em>Her kommer beskrivelsen og forklaring av standardfeilen, t-verdien og p-verdien som vi har funnet. Her benytter vi oss av pensum (Frigessi and Aalen 2018), (Campbell, Walters, and Machin 2020) og (Spiegelhalter 2019, kap 5).</em></p>
 <p><em>Tenker det også viktig å få inn svar på spørsmålene: “Korleis definerer og tolker man p-verdien i regresjonstabellen vår? Kva betyr den?</em></p>
 </section>
