@@ -54,7 +54,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="02-regression-models_files/libs/clipboard/clipboard.min.js"></script>
@@ -104,7 +124,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="del-1-laktat-terskler">Del 1: Laktat terskler</h2>
 <section id="introduksjon" class="level3">
 <h3 class="anchored" data-anchor-id="introduksjon">Introduksjon</h3>
-<p>Laktat terskel er en variabel som er godt brukt for å forutsi prestasjon innenfor utholdenhets idretter, til å styre intensiteten av treningsøkter og evaluere trenings effekt <span class="citation" data-cites="machado2012">@machado2012</span>. Det finnes ulike metoder for å finne testpersonens laktat terskel, <span class="citation" data-cites="machado2012">@machado2012</span> forteller oss at den “maximal-deviation method” (Dmax) anbefalt av Cheng et al.&nbsp;1992, bidrar med å kunne evaluere de ulike mekanismene som virker bestemmende for prestasjon innenfor langdistanseløping og sykling. Videre hadde denne metoden en bedre korrelasjon med prestasjon og laktat terskel sammenliknet med andre metoder. I våres reliabilitets tester ble det ikke utført laktat målinger, på bakgrunn av dette benytter vi oss av data settet til “cyclingstudy”. De representative tersklene som blir undersøkt er 2 mmol L-1 og 4 mmol L-1.</p>
+<p>Laktat terskel er en variabel som er godt brukt for å forutsi prestasjon innenfor utholdenhets idretter, til å styre intensiteten av treningsøkter og evaluere trenings effekt <span class="citation" data-cites="machado2012">(<a href="#ref-machado2012" role="doc-biblioref">Machado et al., 2012</a>)</span>. Det finnes ulike metoder for å finne testpersonens laktat terskel. <span class="citation" data-cites="machado2012">Machado et al. (<a href="#ref-machado2012" role="doc-biblioref">2012</a>)</span> forteller oss at den “maximal-deviation method” (Dmax) anbefalt av Cheng et al.&nbsp;1992, bidrar med å kunne evaluere de ulike mekanismene som virker bestemmende for prestasjon innenfor langdistanseløping og sykling <span class="citation" data-cites="machado2012">(<a href="#ref-machado2012" role="doc-biblioref">Machado et al., 2012</a>)</span>. Videre hadde denne metoden en bedre korrelasjon med prestasjon og laktat terskel sammenliknet med andre metoder. I våres reliabilitets tester ble det ikke utført laktat målinger, på bakgrunn av dette benytter vi oss av data settet til “cyclingstudy”. De representative tersklene som blir undersøkt er 2 mmol L-1 og 4 mmol L-1.</p>
 </section>
 <section id="metode" class="level3">
 <h3 class="anchored" data-anchor-id="metode">Metode</h3>
@@ -252,9 +272,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="del-2-forutsi-størrelser-på-dna-fragmenter-eller-stiningene-i-en-qpcr-kalibreringskurve" class="level2">
 <h2 class="anchored" data-anchor-id="del-2-forutsi-størrelser-på-dna-fragmenter-eller-stiningene-i-en-qpcr-kalibreringskurve">Del 2: Forutsi størrelser på DNA fragmenter eller stiningene i en qPCR-kalibreringskurve</h2>
-<p><strong>Introduksjon</strong>: <em>Samme som over - kort om kva arbeid vi gjorde på molekylærelab og hensikt, se pdf-fil DNA-ekstraksjon gruppe 2. Her må vi også bestemme oss for kva vi velger å fokusere på: DNA-fragmentene eller qPCR resultatene. Legge også kort til her kva informasjon dette gir oss: enten DNA vs qPCR.</em></p>
-<p><strong>Metode</strong>: <em>Om vi velger å analysere DNA-fragmentene så tenker eg vi følger linket veileder i oppgåveteksten, se <a href="https://trainome.github.io/protocols/sw_pcr_size_determination.html">her</a>. Her må vi også inkludere koden for korleis man kom frem til dei predikerte størrelsene.</em> <em>Velger vi derimot å se på helningen på kalibreringskurven, må vi bruke innsamlet data til å beregne reaksjonseffektiviteten.</em></p>
-<p><strong>Diskusjon</strong>: <em>Vise frem resultatene og snakke kva dei betyr og gir oss av informasjon. Her kan vi ogs ta med diskusjonen/konklusjonen vår fra lab-rapporten vår.</em></p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -343,6 +360,11 @@ Residual standard error: 0.09807 on 11 degrees of freedom
 Multiple R-squared:  0.9895,    Adjusted R-squared:  0.9886 
 F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate molecular weights from migration distances</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">predict</span>(cal, <span class="at">newdata =</span> unknown))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 </section>
 <section id="del-3-tolkning-av-regresjonsmodell" class="level2">
@@ -353,114 +375,120 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Laster inn nødvendige biblioteker</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(exscidata)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Laster inn nødvendige biblioteker</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(exscidata)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>I <code>?hypertrofi</code> er FAST_NUCLEI_T1 beskrevet som antall myonuclei per type-II muskelfiber, mens TRAINING_AGE viser til antall år med tidligere treningserfaring. Antall myonuclei per type-II muskelfiber, kan ha noko å si om muskelens egenskap til å utvikle kraft og personers styrke (sett inn ref rfa McArdle &amp; Catch kap 22). Det er også diskutert om trening kan føre til endringer i muskelfiber type eller om de genetiske faktorene er det som er avgjørende for muskelfiber type fordelingen til den enkelte (ref, McArdle &amp; Catch s.535). Vi ønsker derfor å se nærmer om det er en lineær sammenheng mellom FAST_NUCLEI_T1 og TRAINING_AGE i datasettet <code>hypertrofi</code>.</p>
+<p>I <code>?hypertrofi</code> er FAST_NUCLEI_T1 beskrevet som antall myonuclei per type-II muskelfiber, mens TRAINING_AGE viser til antall år med tidligere treningserfaring. Antall myonuclei per type-II muskelfiber, kan ha noko å si om muskelens egenskap til å utvikle kraft og personers styrke <span class="citation" data-cites="mcardle2014">(<a href="#ref-mcardle2014" role="doc-biblioref">McArdle et al., 2014</a>, kap 22)</span>. Det er også diskutert om trening kan føre til endringer i muskelfiber type eller om de genetiske faktorene er det som er avgjørende for muskelfiber type fordelingen til den enkelte <span class="citation" data-cites="mcardle2014">(<a href="#ref-mcardle2014" role="doc-biblioref">McArdle et al., 2014, p. s.535</a>)</span>. Vi ønsker derfor å se nærmer om det er en lineær sammenheng mellom FAST_NUCLEI_T1 og TRAINING_AGE i datasettet <code>hypertrofi</code>.</p>
 <p><strong>Spørsmålet</strong>: Er det et lineært forhold mellom myonuclei per fiber CSA i type 2 og treningsalder?</p>
 </section>
 <section id="metode-1" class="level3">
 <h3 class="anchored" data-anchor-id="metode-1">Metode</h3>
-<p>Under i <strong>Plot</strong> <strong>?@fig-plot-training-age-myonuclei</strong> er FAST_NUCLEI_T1 satt som den avhengige variabelen på y-aksen, mens TRAINING_AGE er valgt som den uavhengige variabelen på x-aksen. Grafen er ment for å gi oss et raskt overblikk av dataene.</p>
+<p>Under i <a href="#fig-plot-training-age-myonuclei" class="quarto-xref">Figure&nbsp;1</a> er <code>FAST_NUCLEI_T1</code> satt som den avhengige variabelen på y-aksen, mens <code>TRAINING_AGE</code> er valgt som den uavhengige variabelen på x-aksen. Grafen er ment for å gi oss et raskt overblikk av dataene.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Laster inn data</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"hypertrophy"</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtrerer ut NA-verdier før du velger variabler</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> hypertrophy <span class="sc">%&gt;%</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(TRAINING_AGE) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(FAST_NUCLEI_T1)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PARTICIPANT, GROUP, TRAINING_AGE, FAST_NUCLEI_T1)</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotter data uten NA-verdier</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>ds <span class="sc">%&gt;%</span> </span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(TRAINING_AGE, FAST_NUCLEI_T1)) <span class="sc">+</span></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">fill =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Sammenheng mellom treningserfaring og myonuklei"</span>,</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Treningsår"</span>, </span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Myonuklei per fiber CSA i Type II"</span>) <span class="sc">+</span></span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Laster inn data</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"hypertrophy"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtrerer ut NA-verdier før du velger variabler</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> hypertrophy <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(TRAINING_AGE) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(FAST_NUCLEI_T1)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PARTICIPANT, GROUP, TRAINING_AGE, FAST_NUCLEI_T1)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotter data uten NA-verdier</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>ds <span class="sc">%&gt;%</span> </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(TRAINING_AGE, FAST_NUCLEI_T1)) <span class="sc">+</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">fill =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Sammenheng mellom treningserfaring og myonuklei"</span>,</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Treningsår"</span>, </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Myonuklei per fiber CSA i Type II"</span>) <span class="sc">+</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="02-regression-models_files/figure-html/plot-training-age-myonuclei-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption>Plott 1: Sammenheng mellom treningalder og myonuclei per fiber CSA i Type-II</figcaption>
+<div id="fig-plot-training-age-myonuclei" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-plot-training-age-myonuclei-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02-regression-models_files/figure-html/fig-plot-training-age-myonuclei-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-plot-training-age-myonuclei-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Sammenheng mellom treningalder og myonuclei per fiber CSA i Type-II
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>ved hjelp av <code>geom_smooth</code> har vi lagt inn den best tilpassede linjen til datapunktene, også kalt lineær regresjonslinje (trenger <strong><em>ref</em></strong>). Det gråe området omkring regresjonslinjen, visualiserer konfidensintervallet til linjen. Et bredt konfidensintervall som fremstilt her, indikerer større usikkerhet i hvordan variablene relaterer til hverandre (<strong><em>ref</em></strong>, Speiegel s.240-244). Dette kommer vi tilbake til senere, under “Diskusjon”.</p>
-<p>For å presentere regresjonslinjen, har vi laget en lineær statistisk modell for hjelp til videre tolkning mellom forholdet av dei to variablene. Oppsummering av de statistiske parametrene som vi har valgt å fokusere på i diskusjonen vår er listet opp i tabellen under.</p>
+<p>ved hjelp av <code>geom_smooth</code> har vi lagt inn den best tilpassede linjen til datapunktene, også kalt lineær regresjonslinje <span class="citation" data-cites="spieg2019">(<a href="#ref-spieg2019" role="doc-biblioref">Spiegelhalter, 2019, pp. s.128–129</a>)</span>. Det gråe området omkring regresjonslinjen, visualiserer konfidensintervallet til linjen. Et bredt konfidensintervall som fremstilt her, indikerer større usikkerhet i hvordan variablene relaterer til hverandre <span class="citation" data-cites="spieg2019">(<a href="#ref-spieg2019" role="doc-biblioref">Spiegelhalter, 2019, pp. s.240–244</a>)</span>.</p>
+<p>For å presentere regresjonslinjen, har vi laget en lineær statistisk modell for hjelp til videre tolkning mellom forholdet av dei to variablene. Oppsummering av de statistiske parametrene som vi har valgt å fokusere på i diskusjonen vår er listet opp i <a href="#tbl-regresjon" class="quarto-xref">Table&nbsp;1</a> under.</p>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lager lineær modell med ds uten NA-verdier</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(FAST_NUCLEI_T1 <span class="sc">~</span> TRAINING_AGE, <span class="at">data =</span> ds)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Henter ut koeffisienter og deres statistikker</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>model_summary <span class="ot">&lt;-</span> <span class="fu">tidy</span>(mod1)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Tilpasser p-verdier og runder av, og fjerner interceptet</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>model_summary <span class="ot">&lt;-</span> model_summary <span class="sc">%&gt;%</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">ifelse</span>(term <span class="sc">==</span> <span class="st">"(Intercept)"</span>, <span class="st">"Intercept (Konstantledd)"</span>, <span class="st">"Treningserfaring (år)"</span>),</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">p.value =</span> <span class="fu">ifelse</span>(p.value <span class="sc">&lt;</span> <span class="fl">0.001</span>, <span class="st">"&lt; 0.001"</span>, <span class="fu">round</span>(p.value, <span class="dv">3</span>)),</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimate =</span> <span class="fu">round</span>(estimate, <span class="dv">3</span>),</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">std.error =</span> <span class="fu">round</span>(std.error, <span class="dv">3</span>),</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">statistic =</span> <span class="fu">round</span>(statistic, <span class="dv">3</span>)</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filtrer ut interceptet</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">!=</span> <span class="st">"Intercept (Konstantledd)"</span>)</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Velger å filtrere ut intercept da det ikkje er aktuelt når vi kun skal se om</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># det er en lineær sammenheng mellom dei to variablene</span></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Lager regresjonstabell med forklarende radnavn</span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>regression_table <span class="ot">&lt;-</span> model_summary <span class="sc">%&gt;%</span></span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(term, estimate, std.error, statistic, p.value) <span class="sc">%&gt;%</span></span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_auto</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="st">"Term"</span>,</span>
-<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimate =</span> <span class="st">"Estimert koeffisient"</span>,</span>
-<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">std.error =</span> <span class="st">"Standardfeil"</span>,</span>
-<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">statistic =</span> <span class="fu">md</span>(<span class="st">"*t*-verdi"</span>),</span>
-<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">p.value =</span> <span class="fu">md</span>(<span class="st">"*p*-verdi"</span>)</span>
-<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
-<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Resultater fra lineær regresjon"</span>,</span>
-<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Sammenhengen mellom treningserfaring og myonuklei per fiber"</span></span>
-<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_source_note</span>(</span>
-<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">source_note =</span> <span class="st">"**Notat**: *p*-verdier mindre enn 0.05 anses som statistisk signifikante."</span></span>
-<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Vis resultatene</span></span>
-<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(regression_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lager lineær modell med ds uten NA-verdier</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(FAST_NUCLEI_T1 <span class="sc">~</span> TRAINING_AGE, <span class="at">data =</span> ds)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Henter ut koeffisienter og deres statistikker</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>model_summary <span class="ot">&lt;-</span> <span class="fu">tidy</span>(mod1)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Tilpasser p-verdier og runder av, og fjerner interceptet</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>model_summary <span class="ot">&lt;-</span> model_summary <span class="sc">%&gt;%</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">ifelse</span>(term <span class="sc">==</span> <span class="st">"(Intercept)"</span>, <span class="st">"Intercept (Konstantledd)"</span>, <span class="st">"Treningserfaring (år)"</span>),</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">p.value =</span> <span class="fu">ifelse</span>(p.value <span class="sc">&lt;</span> <span class="fl">0.001</span>, <span class="st">"&lt; 0.001"</span>, <span class="fu">round</span>(p.value, <span class="dv">3</span>)),</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimate =</span> <span class="fu">round</span>(estimate, <span class="dv">3</span>),</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">std.error =</span> <span class="fu">round</span>(std.error, <span class="dv">3</span>),</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">statistic =</span> <span class="fu">round</span>(statistic, <span class="dv">3</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filtrer ut interceptet</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">!=</span> <span class="st">"Intercept (Konstantledd)"</span>)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Velger å filtrere ut intercept da det ikkje er aktuelt når vi kun skal se om</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># det er en lineær sammenheng mellom dei to variablene</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Lager regresjonstabell med forklarende radnavn</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>regression_table <span class="ot">&lt;-</span> model_summary <span class="sc">%&gt;%</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(term, estimate, std.error, statistic, p.value) <span class="sc">%&gt;%</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_auto</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="st">"Term"</span>,</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimate =</span> <span class="st">"Estimert koeffisient"</span>,</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">std.error =</span> <span class="st">"Standardfeil"</span>,</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">statistic =</span> <span class="fu">md</span>(<span class="st">"*t*-verdi"</span>),</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">p.value =</span> <span class="fu">md</span>(<span class="st">"*p*-verdi"</span>)</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_source_note</span>(</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">source_note =</span> <span class="st">"**Notat**: *p*-verdier mindre enn 0.05 anses som statistisk signifikante."</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Vis resultatene</span></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(regression_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="spnfcyqnhv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#spnfcyqnhv table {
+<div id="tbl-regresjon" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-regresjon-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber type-II
+</figcaption>
+<div aria-describedby="tbl-regresjon-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div id="veoxqaonmj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#veoxqaonmj table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#spnfcyqnhv thead, #spnfcyqnhv tbody, #spnfcyqnhv tfoot, #spnfcyqnhv tr, #spnfcyqnhv td, #spnfcyqnhv th {
+#veoxqaonmj thead, #veoxqaonmj tbody, #veoxqaonmj tfoot, #veoxqaonmj tr, #veoxqaonmj td, #veoxqaonmj th {
   border-style: none;
 }
 
-#spnfcyqnhv p {
+#veoxqaonmj p {
   margin: 0;
   padding: 0;
 }
 
-#spnfcyqnhv .gt_table {
+#veoxqaonmj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -486,12 +514,12 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#spnfcyqnhv .gt_caption {
+#veoxqaonmj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#spnfcyqnhv .gt_title {
+#veoxqaonmj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -503,7 +531,7 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   border-bottom-width: 0;
 }
 
-#spnfcyqnhv .gt_subtitle {
+#veoxqaonmj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -515,7 +543,7 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   border-top-width: 0;
 }
 
-#spnfcyqnhv .gt_heading {
+#veoxqaonmj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -527,13 +555,13 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#spnfcyqnhv .gt_bottom_border {
+#veoxqaonmj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#spnfcyqnhv .gt_col_headings {
+#veoxqaonmj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -548,7 +576,7 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#spnfcyqnhv .gt_col_heading {
+#veoxqaonmj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -568,7 +596,7 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   overflow-x: hidden;
 }
 
-#spnfcyqnhv .gt_column_spanner_outer {
+#veoxqaonmj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -580,15 +608,15 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   padding-right: 4px;
 }
 
-#spnfcyqnhv .gt_column_spanner_outer:first-child {
+#veoxqaonmj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#spnfcyqnhv .gt_column_spanner_outer:last-child {
+#veoxqaonmj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#spnfcyqnhv .gt_column_spanner {
+#veoxqaonmj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -600,11 +628,11 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   width: 100%;
 }
 
-#spnfcyqnhv .gt_spanner_row {
+#veoxqaonmj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#spnfcyqnhv .gt_group_heading {
+#veoxqaonmj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -630,7 +658,7 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   text-align: left;
 }
 
-#spnfcyqnhv .gt_empty_group_heading {
+#veoxqaonmj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -645,15 +673,15 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   vertical-align: middle;
 }
 
-#spnfcyqnhv .gt_from_md > :first-child {
+#veoxqaonmj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#spnfcyqnhv .gt_from_md > :last-child {
+#veoxqaonmj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#spnfcyqnhv .gt_row {
+#veoxqaonmj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -672,7 +700,7 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   overflow-x: hidden;
 }
 
-#spnfcyqnhv .gt_stub {
+#veoxqaonmj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -685,7 +713,7 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   padding-right: 5px;
 }
 
-#spnfcyqnhv .gt_stub_row_group {
+#veoxqaonmj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -699,15 +727,15 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   vertical-align: top;
 }
 
-#spnfcyqnhv .gt_row_group_first td {
+#veoxqaonmj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#spnfcyqnhv .gt_row_group_first th {
+#veoxqaonmj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#spnfcyqnhv .gt_summary_row {
+#veoxqaonmj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -717,16 +745,16 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   padding-right: 5px;
 }
 
-#spnfcyqnhv .gt_first_summary_row {
+#veoxqaonmj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#spnfcyqnhv .gt_first_summary_row.thick {
+#veoxqaonmj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#spnfcyqnhv .gt_last_summary_row {
+#veoxqaonmj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -736,7 +764,7 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#spnfcyqnhv .gt_grand_summary_row {
+#veoxqaonmj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -746,7 +774,7 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   padding-right: 5px;
 }
 
-#spnfcyqnhv .gt_first_grand_summary_row {
+#veoxqaonmj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -756,7 +784,7 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#spnfcyqnhv .gt_last_grand_summary_row_top {
+#veoxqaonmj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -766,11 +794,11 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#spnfcyqnhv .gt_striped {
+#veoxqaonmj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#spnfcyqnhv .gt_table_body {
+#veoxqaonmj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -779,7 +807,7 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#spnfcyqnhv .gt_footnotes {
+#veoxqaonmj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -793,7 +821,7 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#spnfcyqnhv .gt_footnote {
+#veoxqaonmj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -802,7 +830,7 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   padding-right: 5px;
 }
 
-#spnfcyqnhv .gt_sourcenotes {
+#veoxqaonmj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -816,7 +844,7 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#spnfcyqnhv .gt_sourcenote {
+#veoxqaonmj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -824,87 +852,77 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
   padding-right: 5px;
 }
 
-#spnfcyqnhv .gt_left {
+#veoxqaonmj .gt_left {
   text-align: left;
 }
 
-#spnfcyqnhv .gt_center {
+#veoxqaonmj .gt_center {
   text-align: center;
 }
 
-#spnfcyqnhv .gt_right {
+#veoxqaonmj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#spnfcyqnhv .gt_font_normal {
+#veoxqaonmj .gt_font_normal {
   font-weight: normal;
 }
 
-#spnfcyqnhv .gt_font_bold {
+#veoxqaonmj .gt_font_bold {
   font-weight: bold;
 }
 
-#spnfcyqnhv .gt_font_italic {
+#veoxqaonmj .gt_font_italic {
   font-style: italic;
 }
 
-#spnfcyqnhv .gt_super {
+#veoxqaonmj .gt_super {
   font-size: 65%;
 }
 
-#spnfcyqnhv .gt_footnote_marks {
+#veoxqaonmj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#spnfcyqnhv .gt_asterisk {
+#veoxqaonmj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#spnfcyqnhv .gt_indent_1 {
+#veoxqaonmj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#spnfcyqnhv .gt_indent_2 {
+#veoxqaonmj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#spnfcyqnhv .gt_indent_3 {
+#veoxqaonmj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#spnfcyqnhv .gt_indent_4 {
+#veoxqaonmj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#spnfcyqnhv .gt_indent_5 {
+#veoxqaonmj .gt_indent_5 {
   text-indent: 25px;
 }
 
-#spnfcyqnhv .katex-display {
+#veoxqaonmj .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#spnfcyqnhv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#veoxqaonmj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 <table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
-<tr class="gt_heading">
-<td colspan="5" class="gt_heading gt_title gt_font_normal" style="">
-Resultater fra lineær regresjon
-</td>
-</tr>
-<tr class="gt_heading">
-<td colspan="5" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="">
-Sammenhengen mellom treningserfaring og myonuklei per fiber
-</td>
-</tr>
 <tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Term">
 Term
@@ -965,17 +983,32 @@ Treningserfaring (år)
 </tfoot>
 </table>
 </div>
+</div>
+</figure>
+</div>
 </section>
 <section id="diskusjon" class="level3">
 <h3 class="anchored" data-anchor-id="diskusjon">Diskusjon</h3>
-<p>I tabellen kan vi lese av verdiene for estimert koeffisient (regresjonskoeffisient), standardfeil, t-verdi og p-verdi. Den estimerte koeffisenten til “Treningserfaring (år)” forteller oss hvor mye <code>FAST_NUCLEI_T1</code> endres per enhet økning i <code>TRAINING_AGE</code>. I vårt tilfelle ser man en antall nukleikjerner per fiber reduseres med 0.008 per år med treningserfaring. Standardfeilen måler hvor mye koeffisientene er forventet å variere fra utvalg til utvalg (<strong>ref</strong>). Standardfeilen som vi har fått er liten i tallverdi, og man kan da fort konkludere at estimeringen er presis grunnet lav standardfeil. Samtidig er det viktig å se standardfeilen i lys av den estimerte koefisienten. I forhold til koeffisienten selv, er standardfeilen stor, og betyr at man burde være usikker på nøyaktigheten til estimatet (<strong>ref</strong>).</p>
-<p><em>t-verdien</em> sier hvor mange standardavvik den estimerte koeffisienten er fra 0, der jo høyere t-verdien (enten negativ eller positiv), dess mer signifikant er koeffisienten (<strong>ref</strong>). Hos oss er <em>t-verdien</em> -0.104, noe som indikerer at det ikke er noe signifikant lineær sammenheng mellom <code>FAST_NUCLEI_T1</code> og <code>TRAINING_AGE</code>.</p>
-<p>Nært knyttet til <em>t-verdien</em>, har man <em>p-verdien</em> som hjelper oss å si om <em>t-verdien</em> er statistisk signifikant (<strong>ref</strong>). P-verdi er sannsynligheten for å observere en så ekstrem teststatistikk som den t-verdien vi har fått, gitt antagelsen at det ikke er en sammenheng mellom variablene våre (<strong>ref</strong>). Basert på at p-verdien i vår modell er 0.918, er det 91,8 % sannsynlighet at man vil observere en t-verdi på -0.008. Vi har derfor ikkje tilstrekkelig bevis for å kunne si at den uavhengige variabelen <code>TRAINING_AGE</code> har en effekt på den avhengige variabelen <code>FAST_NUCLEI_T1</code>, og at det er en statistik lineær sammenheng mellom variablene (<strong>ref</strong>).</p>
-<p>Selv om p-verdi er et nyttig verktøy for å hjelpe oss å trekke slutninger om koeffisientenes statistiske signifikans, sier den oss ikke noe om størrelsen på en effekt eller hva praktisk betydning den kan ha (<strong>ref</strong>). Størrelsen på datasettet har også en betydning på p-verdien, der små datasett, som det vi har, kan gi høye p-verdier selv om det er en betydelig effekt (<strong>ref</strong>).</p>
+<p>I tabellen kan vi lese av verdiene for estimert koeffisient (regresjonskoeffisient), standardfeil, t-verdi og p-verdi. Den estimerte koeffisenten til “Treningserfaring (år)” forteller oss hvor mye <code>FAST_NUCLEI_T1</code> endres per enhet økning i <code>TRAINING_AGE</code>. I vårt tilfelle ser man en antall nukleikjerner per fiber reduseres med 0.008 per år med treningserfaring.</p>
+<p>Standardfeilen måler hvor mye koeffisientene er forventet å variere fra utvalg til utvalg. Standardfeilen som vi har fått er liten i tallverdi, og man kan da fort konkludere at estimeringen er presis grunnet lav standardfeil. Samtidig er det viktig å se standardfeilen i lys av den estimerte koefisienten. I forhold til koeffisienten selv, er standardfeilen stor, og betyr at man burde være usikker på nøyaktigheten til estimatet <span class="citation" data-cites="spieg2019">(<a href="#ref-spieg2019" role="doc-biblioref">Spiegelhalter, 2019, pp. s.230–232</a>)</span></p>
+<p><em>t-verdien</em> sier hvor mange standardavvik den estimerte koeffisienten er fra 0, der jo høyere t-verdien (enten negativ eller positiv), dess mer signifikant er koeffisienten <span class="citation" data-cites="spieg2019">(<a href="#ref-spieg2019" role="doc-biblioref">Spiegelhalter, 2019, pp. s.275–276</a>)</span>. Hos oss er t-verdien -0.104, noe som indikerer at det ikke er noe signifikant lineær sammenheng mellom <code>FAST_NUCLEI_T1</code> og <code>TRAINING_AGE</code>.</p>
+<p>Nært knyttet til t-verdien, har man <em>p-verdien</em> som hjelper oss å si om t-verdien er statistisk signifikant. P-verdi er sannsynligheten for å observere en så ekstrem teststatistikk som den t-verdien vi har fått, gitt antagelsen at det ikke er en sammenheng mellom variablene våre <span class="citation" data-cites="spieg2019">(<a href="#ref-spieg2019" role="doc-biblioref">Spiegelhalter, 2019, pp. s.264–265</a>)</span>. Basert på at p-verdien i vår modell er 0.918, er det 91,8 % sannsynlighet at man vil observere en t-verdi på -0.008. Vi har derfor ikkje tilstrekkelig bevis for å kunne si at den uavhengige variabelen <code>TRAINING_AGE</code> har en effekt på den avhengige variabelen <code>FAST_NUCLEI_T1</code>, og at det er en statistik lineær sammenheng mellom variablene <span class="citation" data-cites="spieg2019">(<a href="#ref-spieg2019" role="doc-biblioref">Spiegelhalter, 2019, pp. s.265–268</a>)</span>.</p>
+<p>Selv om p-verdi er et nyttig verktøy for å hjelpe oss å trekke slutninger om koeffisientenes statistiske signifikans, sier den oss ikke noe om størrelsen på en effekt eller hva praktisk betydning den kan ha. Størrelsen på datasettet har også en betydning på p-verdien, der små datasett, som det vi har, kan gi høye p-verdier selv om det er en betydelig effekt <span class="citation" data-cites="spieg2019">(<a href="#ref-spieg2019" role="doc-biblioref">Spiegelhalter, 2019, p. s.285</a>)</span></p>
+
 </section>
 </section>
 
-</main>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-machado2012" class="csl-entry" role="listitem">
+Machado, F. A., Nakamura, F. Y., &amp; Moraes, S. M. F. D. (2012). Influence of regression model and incremental test protocol on the relationship between lactate threshold using the maximal-deviation method and performance in female runners. <em>Journal of Sports Sciences</em>, <em>30</em>(12), 1267–1274.
+</div>
+<div id="ref-mcardle2014" class="csl-entry" role="listitem">
+McArdle, W. D., Katch, F. I., &amp; Katch, V. L. (2014). <em>Exercise physiology: Nutrition, energy, and human performance</em> (8th ed.). Wolters Kluwer Health.
+</div>
+<div id="ref-spieg2019" class="csl-entry" role="listitem">
+Spiegelhalter, D. J. (2019). <em>The art of statistics : Learning from data</em> (1th ed.). Pelican.
+</div>
+</div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
