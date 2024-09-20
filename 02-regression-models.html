@@ -272,6 +272,28 @@ div.csl-indent {
 </section>
 <section id="del-2-forutsi-størrelser-på-dna-fragmenter-eller-stiningene-i-en-qpcr-kalibreringskurve" class="level2">
 <h2 class="anchored" data-anchor-id="del-2-forutsi-størrelser-på-dna-fragmenter-eller-stiningene-i-en-qpcr-kalibreringskurve">Del 2: Forutsi størrelser på DNA fragmenter eller stiningene i en qPCR-kalibreringskurve</h2>
+<section id="introduksjon-1" class="level3">
+<h3 class="anchored" data-anchor-id="introduksjon-1">Introduksjon</h3>
+<p>I denne delen av oppgaven tar vi utgangspunkt i forsøket vi gjorde på molekylærlabben 05. - 06. september, hvor vi ekstraherte DNA fra blod. Videre forsøkte vi å isolere genene som assosieres med hurtig muskelfibersammentrekning (R/R) og langsom muskelfibersammentrekning (X/X) ved hjelp av en PCR-maskin. Prøvene herfra ble testet videre ved hjelp av elektroforese i agarose gel sammen med en DNA-stige (ladder) som brukes som markør for å kartlegge genene. Etter elektroforesene tok vi bilde av preøven slik at vi kunne observere resultatene. Stigen markerer antall hvert fetiende basebar (bp) opp til 300, og hvert 100. basepar videre til 1000bp. det dominante R/R-genet har 413bp og det ressesive X/X-genet har 318bp. De små genmolekylene med få basepar vil trenge lenger in i gelen under elektroforesen, så X/X-genet vil altså trenge lenger inn i gelen ved elektroforese. Dette kan være vanskelig å observere bare med øynene, og vil ikke være særlig nøyaktig. For å få et mer reliabelt resultat har vi derfor brukt følgende metode. Fra prøvene våre var det tre brønner som gav resultat - to med et gen, og en med to.</p>
+</section>
+<section id="metode-1" class="level3">
+<h3 class="anchored" data-anchor-id="metode-1">Metode</h3>
+<p>Først har vi brukt ImageJ Fiji for å behandle bildet vi fikk fra DNA-prøvene. Vi inverterte bildet for å få tydeligere farger, roterte det rett vei og klipte ut delen av bildet vi ville bruke - altså analysen av våre prøver. Videre brukte vi rektangelverktøyet for å markere stigen og prøvene vi ville analysere. Ut fra de markerte områdene lager ImageJ fiji grafer for hver brønn. Vi markerte toppunktene i alle grafene som indikerer gen (og trinn på stigen). Programmet registrerer plasseringen til toppunktene og disse “koordinatene” legges inn i et excell-dokument som vi bruker til beregningene.</p>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>796d002e0b0ef4c4714dda1e5eb02c80942fb5c8</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -280,10 +302,12 @@ div.csl-indent {
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/resultat_dna_analyse.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>For å finne ut av molekylstørrelsen til de ukjente prøvene våre må vi først kalibrere stigen. Dette gjør vi ved å lage en data.fram som vi kaller ladder. Her er tallene omvendt proposjonale ettersom det er de små molekylene som trekkes lengst inn i gelen. Denne dataframen kaller vi “ladder”.</p>
+<p>Videre må vi også lage en data.fram for de ukjente variablene som vi kaller “unknown”</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## lage dataramme for å finne avstand og molekylærvekt</span></span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lage dataramme for å finne avstand og molekylærvekt</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ladder <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">dist =</span> <span class="fu">c</span>(<span class="dv">36</span>, <span class="fl">59.5</span>, <span class="fl">86.5</span>,</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fl">119.5</span>, <span class="fl">159.5</span>, <span class="fl">208.5</span>,</span>
@@ -294,15 +318,16 @@ div.csl-indent {
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                            <span class="dv">400</span>, <span class="dv">300</span>, <span class="dv">250</span>, </span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                            <span class="dv">200</span>, <span class="dv">150</span>, <span class="dv">100</span>, <span class="dv">50</span>))</span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="do">## lage ny dataramme med ukjente variabler</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># lage ny dataramme med ukjente variabler</span></span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>unknown <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">dist =</span> <span class="fu">c</span>(<span class="fl">258.5</span>, <span class="fl">262.5</span>, <span class="fl">265.5</span>, <span class="fl">335.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>For å lage en kalibreringsmodell bruker vi de samme dataene i ggplot for å vise stigen. Dette brukes videre for å estimere størrelsen på de ukjente variablene. Vi valgte å bruke en bøyd graf (poly) for å få minst mulig avvik.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## lage en kalibreringsmodell ved hjelp av stigen</span></span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lage en kalibreringsmodell ved hjelp av stigen</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -331,6 +356,7 @@ div.csl-indent {
 </div>
 </div>
 </div>
+<p>Til slutt brukte vi følgende koder for å estimere molekylstørrelsen på genene i prøven vår.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -363,14 +389,20 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate molecular weights from migration distances</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">predict</span>(cal, <span class="at">newdata =</span> unknown))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">predict</span>(cal, <span class="at">newdata =</span> unknown)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>Brønn 1: 407 bp Brønn 2: 401 bp Brønn 3: 396 bp og 296 bp</p>
+</section>
+<section id="diskusjon" class="level3">
+<h3 class="anchored" data-anchor-id="diskusjon">Diskusjon</h3>
+<p>Denne analysen viser at ingen av genene våre har helt riktig størelse i forhold til genene vi testet for - R/R (413bp) og X/X (318bp). Vi er likevel i nærheten som kan tyde på at allelene for brønn 1 og 2 er R/R og brønn 3 er R/X. Avviket kan forklares med unøyaktighet under DNA-testen (sansynlig ettersom validitetskontrollen i prøveresultatet ikke kom fram) og med dårlig kvalitet på bildet som vi brukte i denne oppgaven. I rapporten fra forsøket tolket vi prøvene annerledes og trodde at brønn 1, 2 og 3 alle hadde alleler litt over 300bp og at brønn 3 i tillegg hadde en feil med en ukjent allel som var på 250bp. Dette viser at det er mye unæyaktighet ved å bruke kun øynene til å tolke resultatet.</p>
+</section>
 </section>
 <section id="del-3-tolkning-av-regresjonsmodell" class="level2">
 <h2 class="anchored" data-anchor-id="del-3-tolkning-av-regresjonsmodell">Del 3: Tolkning av regresjonsmodell</h2>
-<section id="introduksjon-1" class="level3">
-<h3 class="anchored" data-anchor-id="introduksjon-1">Introduksjon</h3>
+<section id="introduksjon-2" class="level3">
+<h3 class="anchored" data-anchor-id="introduksjon-2">Introduksjon</h3>
 <p>I denne delen av oppgaven har vi valgt å se nærmere på variablene FAST_NUCLEI_T1 og TRAINING_AGE i datasettet <code>hypertrofi</code>, som er en del av <code>exscidata</code> pakken. For utforming av tabeller, figurer og grafer bruker vi <code>tidyverse</code>, <code>broom</code> og <code>gt</code>.</p>
 <div class="cell">
 <details class="code-fold">
@@ -385,8 +417,8 @@ F-statistic:  1039 on 1 and 11 DF,  p-value: 3.059e-12</code></pre>
 <p>I <code>?hypertrofi</code> er FAST_NUCLEI_T1 beskrevet som antall myonuclei per type-II muskelfiber, mens TRAINING_AGE viser til antall år med tidligere treningserfaring. Antall myonuclei per type-II muskelfiber, kan ha noko å si om muskelens egenskap til å utvikle kraft og personers styrke <span class="citation" data-cites="mcardle2014">(<a href="#ref-mcardle2014" role="doc-biblioref">McArdle et al., 2014</a>, kap 22)</span>. Det er også diskutert om trening kan føre til endringer i muskelfiber type eller om de genetiske faktorene er det som er avgjørende for muskelfiber type fordelingen til den enkelte <span class="citation" data-cites="mcardle2014">(<a href="#ref-mcardle2014" role="doc-biblioref">McArdle et al., 2014, p. s.535</a>)</span>. Vi ønsker derfor å se nærmer om det er en lineær sammenheng mellom FAST_NUCLEI_T1 og TRAINING_AGE i datasettet <code>hypertrofi</code>.</p>
 <p><strong>Spørsmålet</strong>: Er det et lineært forhold mellom myonuclei per fiber CSA i type 2 og treningsalder?</p>
 </section>
-<section id="metode-1" class="level3">
-<h3 class="anchored" data-anchor-id="metode-1">Metode</h3>
+<section id="metode-2" class="level3">
+<h3 class="anchored" data-anchor-id="metode-2">Metode</h3>
 <p>Under i <a href="#fig-plot-training-age-myonuclei" class="quarto-xref">Figure&nbsp;1</a> er <code>FAST_NUCLEI_T1</code> satt som den avhengige variabelen på y-aksen, mens <code>TRAINING_AGE</code> er valgt som den uavhengige variabelen på x-aksen. Grafen er ment for å gi oss et raskt overblikk av dataene.</p>
 <div class="cell">
 <details class="code-fold">
@@ -472,23 +504,23 @@ Figure&nbsp;1: Sammenheng mellom treningalder og myonuclei per fiber CSA i Type-
 Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber type-II
 </figcaption>
 <div aria-describedby="tbl-regresjon-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div id="veoxqaonmj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#veoxqaonmj table {
+<div id="jqyxjnkmxk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jqyxjnkmxk table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#veoxqaonmj thead, #veoxqaonmj tbody, #veoxqaonmj tfoot, #veoxqaonmj tr, #veoxqaonmj td, #veoxqaonmj th {
+#jqyxjnkmxk thead, #jqyxjnkmxk tbody, #jqyxjnkmxk tfoot, #jqyxjnkmxk tr, #jqyxjnkmxk td, #jqyxjnkmxk th {
   border-style: none;
 }
 
-#veoxqaonmj p {
+#jqyxjnkmxk p {
   margin: 0;
   padding: 0;
 }
 
-#veoxqaonmj .gt_table {
+#jqyxjnkmxk .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -514,12 +546,12 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   border-left-color: #D3D3D3;
 }
 
-#veoxqaonmj .gt_caption {
+#jqyxjnkmxk .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#veoxqaonmj .gt_title {
+#jqyxjnkmxk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -531,7 +563,7 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   border-bottom-width: 0;
 }
 
-#veoxqaonmj .gt_subtitle {
+#jqyxjnkmxk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -543,7 +575,7 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   border-top-width: 0;
 }
 
-#veoxqaonmj .gt_heading {
+#jqyxjnkmxk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -555,13 +587,13 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   border-right-color: #D3D3D3;
 }
 
-#veoxqaonmj .gt_bottom_border {
+#jqyxjnkmxk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#veoxqaonmj .gt_col_headings {
+#jqyxjnkmxk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -576,7 +608,7 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   border-right-color: #D3D3D3;
 }
 
-#veoxqaonmj .gt_col_heading {
+#jqyxjnkmxk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -596,7 +628,7 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   overflow-x: hidden;
 }
 
-#veoxqaonmj .gt_column_spanner_outer {
+#jqyxjnkmxk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -608,15 +640,15 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   padding-right: 4px;
 }
 
-#veoxqaonmj .gt_column_spanner_outer:first-child {
+#jqyxjnkmxk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#veoxqaonmj .gt_column_spanner_outer:last-child {
+#jqyxjnkmxk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#veoxqaonmj .gt_column_spanner {
+#jqyxjnkmxk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -628,11 +660,11 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   width: 100%;
 }
 
-#veoxqaonmj .gt_spanner_row {
+#jqyxjnkmxk .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#veoxqaonmj .gt_group_heading {
+#jqyxjnkmxk .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -658,7 +690,7 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   text-align: left;
 }
 
-#veoxqaonmj .gt_empty_group_heading {
+#jqyxjnkmxk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -673,15 +705,15 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   vertical-align: middle;
 }
 
-#veoxqaonmj .gt_from_md > :first-child {
+#jqyxjnkmxk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#veoxqaonmj .gt_from_md > :last-child {
+#jqyxjnkmxk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#veoxqaonmj .gt_row {
+#jqyxjnkmxk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -700,7 +732,7 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   overflow-x: hidden;
 }
 
-#veoxqaonmj .gt_stub {
+#jqyxjnkmxk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -713,7 +745,7 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   padding-right: 5px;
 }
 
-#veoxqaonmj .gt_stub_row_group {
+#jqyxjnkmxk .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -727,15 +759,15 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   vertical-align: top;
 }
 
-#veoxqaonmj .gt_row_group_first td {
+#jqyxjnkmxk .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#veoxqaonmj .gt_row_group_first th {
+#jqyxjnkmxk .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#veoxqaonmj .gt_summary_row {
+#jqyxjnkmxk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -745,16 +777,16 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   padding-right: 5px;
 }
 
-#veoxqaonmj .gt_first_summary_row {
+#jqyxjnkmxk .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#veoxqaonmj .gt_first_summary_row.thick {
+#jqyxjnkmxk .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#veoxqaonmj .gt_last_summary_row {
+#jqyxjnkmxk .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -764,7 +796,7 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   border-bottom-color: #D3D3D3;
 }
 
-#veoxqaonmj .gt_grand_summary_row {
+#jqyxjnkmxk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -774,7 +806,7 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   padding-right: 5px;
 }
 
-#veoxqaonmj .gt_first_grand_summary_row {
+#jqyxjnkmxk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -784,7 +816,7 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   border-top-color: #D3D3D3;
 }
 
-#veoxqaonmj .gt_last_grand_summary_row_top {
+#jqyxjnkmxk .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -794,11 +826,11 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   border-bottom-color: #D3D3D3;
 }
 
-#veoxqaonmj .gt_striped {
+#jqyxjnkmxk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#veoxqaonmj .gt_table_body {
+#jqyxjnkmxk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -807,7 +839,7 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   border-bottom-color: #D3D3D3;
 }
 
-#veoxqaonmj .gt_footnotes {
+#jqyxjnkmxk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -821,7 +853,7 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   border-right-color: #D3D3D3;
 }
 
-#veoxqaonmj .gt_footnote {
+#jqyxjnkmxk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -830,7 +862,7 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   padding-right: 5px;
 }
 
-#veoxqaonmj .gt_sourcenotes {
+#jqyxjnkmxk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -844,7 +876,7 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   border-right-color: #D3D3D3;
 }
 
-#veoxqaonmj .gt_sourcenote {
+#jqyxjnkmxk .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -852,72 +884,72 @@ Table&nbsp;1: Sammenheng mellom treningserfaring og myonuklei per muskelfiber ty
   padding-right: 5px;
 }
 
-#veoxqaonmj .gt_left {
+#jqyxjnkmxk .gt_left {
   text-align: left;
 }
 
-#veoxqaonmj .gt_center {
+#jqyxjnkmxk .gt_center {
   text-align: center;
 }
 
-#veoxqaonmj .gt_right {
+#jqyxjnkmxk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#veoxqaonmj .gt_font_normal {
+#jqyxjnkmxk .gt_font_normal {
   font-weight: normal;
 }
 
-#veoxqaonmj .gt_font_bold {
+#jqyxjnkmxk .gt_font_bold {
   font-weight: bold;
 }
 
-#veoxqaonmj .gt_font_italic {
+#jqyxjnkmxk .gt_font_italic {
   font-style: italic;
 }
 
-#veoxqaonmj .gt_super {
+#jqyxjnkmxk .gt_super {
   font-size: 65%;
 }
 
-#veoxqaonmj .gt_footnote_marks {
+#jqyxjnkmxk .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#veoxqaonmj .gt_asterisk {
+#jqyxjnkmxk .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#veoxqaonmj .gt_indent_1 {
+#jqyxjnkmxk .gt_indent_1 {
   text-indent: 5px;
 }
 
-#veoxqaonmj .gt_indent_2 {
+#jqyxjnkmxk .gt_indent_2 {
   text-indent: 10px;
 }
 
-#veoxqaonmj .gt_indent_3 {
+#jqyxjnkmxk .gt_indent_3 {
   text-indent: 15px;
 }
 
-#veoxqaonmj .gt_indent_4 {
+#jqyxjnkmxk .gt_indent_4 {
   text-indent: 20px;
 }
 
-#veoxqaonmj .gt_indent_5 {
+#jqyxjnkmxk .gt_indent_5 {
   text-indent: 25px;
 }
 
-#veoxqaonmj .katex-display {
+#jqyxjnkmxk .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#veoxqaonmj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#jqyxjnkmxk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -987,8 +1019,8 @@ Treningserfaring (år)
 </figure>
 </div>
 </section>
-<section id="diskusjon" class="level3">
-<h3 class="anchored" data-anchor-id="diskusjon">Diskusjon</h3>
+<section id="diskusjon-1" class="level3">
+<h3 class="anchored" data-anchor-id="diskusjon-1">Diskusjon</h3>
 <p>I tabellen kan vi lese av verdiene for estimert koeffisient (regresjonskoeffisient), standardfeil, t-verdi og p-verdi. Den estimerte koeffisenten til “Treningserfaring (år)” forteller oss hvor mye <code>FAST_NUCLEI_T1</code> endres per enhet økning i <code>TRAINING_AGE</code>. I vårt tilfelle ser man en antall nukleikjerner per fiber reduseres med 0.008 per år med treningserfaring.</p>
 <p>Standardfeilen måler hvor mye koeffisientene er forventet å variere fra utvalg til utvalg. Standardfeilen som vi har fått er liten i tallverdi, og man kan da fort konkludere at estimeringen er presis grunnet lav standardfeil. Samtidig er det viktig å se standardfeilen i lys av den estimerte koefisienten. I forhold til koeffisienten selv, er standardfeilen stor, og betyr at man burde være usikker på nøyaktigheten til estimatet <span class="citation" data-cites="spieg2019">(<a href="#ref-spieg2019" role="doc-biblioref">Spiegelhalter, 2019, pp. s.230–232</a>)</span></p>
 <p><em>t-verdien</em> sier hvor mange standardavvik den estimerte koeffisienten er fra 0, der jo høyere t-verdien (enten negativ eller positiv), dess mer signifikant er koeffisienten <span class="citation" data-cites="spieg2019">(<a href="#ref-spieg2019" role="doc-biblioref">Spiegelhalter, 2019, pp. s.275–276</a>)</span>. Hos oss er t-verdien -0.104, noe som indikerer at det ikke er noe signifikant lineær sammenheng mellom <code>FAST_NUCLEI_T1</code> og <code>TRAINING_AGE</code>.</p>
