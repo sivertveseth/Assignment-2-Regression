@@ -26,13 +26,10 @@ ds %>%
 # Lager lineær modell med ds uten NA-verdier
 mod1 <- lm(FAST_NUCLEI_T1 ~ TRAINING_AGE, data = ds)
 
-# Summary av den lineære modellen 
-summary(mod1)
-
 # Henter ut koeffisienter og deres statistikker
 model_summary <- tidy(mod1)
 
-# Tilpasser p-verdier og runder av
+# Tilpasser p-verdier og runder av, og fjerner interceptet
 model_summary <- model_summary %>%
   mutate(
     term = ifelse(term == "(Intercept)", "Intercept (Konstantledd)", "Treningserfaring (år)"),
@@ -40,7 +37,11 @@ model_summary <- model_summary %>%
     estimate = round(estimate, 3),
     std.error = round(std.error, 3),
     statistic = round(statistic, 3)
-  )
+  ) %>%
+  # Filtrer ut interceptet
+  filter(term != "Intercept (Konstantledd)")
+  # Velger å fitrere ut intercept da det ikkje er aktuelt når vi kun skal se om
+  # det er en lineær sammenheng mellom dei to variablene
 
 # Lager regresjonstabell med forklarende radnavn
 regression_table <- model_summary %>%
@@ -53,6 +54,13 @@ regression_table <- model_summary %>%
     std.error = "Standardfeil",
     statistic = md("*t*-verdi"),
     p.value = md("*p*-verdi")
+  ) %>% 
+  tab_header(
+    title = "Resultater fra lineær regresjon",
+    subtitle = "Sammenhengen mellom treningserfaring og myonuklei per fiber"
+  ) %>%
+  tab_source_note(
+    source_note = "**Notat**: *p*-verdier mindre enn 0.05 anses som statistisk signifikante."
   )
 
 # Vis resultatene

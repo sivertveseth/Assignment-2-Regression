@@ -9,19 +9,138 @@ editor_options:
   chunk_output_type: console
 ---
 
+
 ## Introduksjon / Bakgrunn
 
-Her kan det være greit at vi legger inn litt om oppgaveteksten, se link https://dhammarstrom.github.io/quant-methods-workshops/assignment-2.html eller READMe.md.
+Denne oppgaven er delt inn tre separate deler som tar for seg konsepter innenfor analyse av data og regresjon. I del 1 kalkulerer vi laktat terskler, og ser nærmere på reliabiliteten mellom to ulike terskelnivåer. Del 2 bruker vi molekylær data til å predikere størrelsen på DNA-fragment ved hjelp av en veileder. I del 3 skal vi se nærmere på om det finnes en lineær sammenheng mellom to valgte variabler fra datasettet `hypertrophy`i datapakken `exscidata`. 
+
 
 ## Del 1: Laktat terskler
 
+### Introduksjon
+
 Laktat terskel er en variabel som er godt brukt for å forutsi prestasjon innenfor utholdenhets idretter, til å styre intensiteten av treningsøkter og evaluere trenings effekt @machado2012. Det finnes ulike metoder for å finne testpersonens laktat terskel, @machado2012 forteller oss at den "maximal-deviation method" (Dmax) anbefalt av Cheng et al. 1992, bidrar med å kunne evaluere de ulike mekanismene som virker bestemmende for prestasjon innenfor langdistanseløping og sykling. Videre hadde denne metoden en bedre korrelasjon med prestasjon og laktat terskel sammenliknet med andre metoder. 
-I våres reliabilitets tester ble det ikke utført laktat målinger, på bakgrunn av dette benytter vi oss av data settet til "cyclingstudy". De representative tersklene som blir undersøkt er 2 mmol L-1 og 4 mmol L-1. 
-*Kort introduksjon av denne delen av oppgaven. Legge kort frem korleis vi kan kalkulere laktatterskel (benytt kanskje [Machado](https://www.tandfonline.com/doi/abs/10.1080/02640414.2012.702424) og kvifor dette kan være gunstig.*
+I våres reliabilitets tester ble det ikke utført laktat målinger, på bakgrunn av dette benytter vi oss av data settet til "cyclingstudy". De representative tersklene som blir undersøkt er 2 mmol L-1 og 4 mmol L-1.
 
-**Metode**: *Her må også koden og utregningen for laktatterskelen komme frem, samt korleis vi regnet ut reliabiliteten mellom to terskler (typical error som en prosent av gj.snittet, se [Hopkins](https://link-springer-com.ezproxy.inn.no/article/10.2165/00007256-200030010-00001).Siden vi ikkje gjorde terskeltesting, så tenker eg at vi kan ta utgangspunkt i `exscidata` pakken, se filen laktatprofil-g2.xlsx for data.*
 
-**Diskusjon**: *Viktig at vi visualiserer det med tabell og graf.Snakke om kva resultatene sier oss og kva nytte dei kan gi oss*
+### Metode
+
+Som en kan se i den plotta grafen under, er de forskjellige grafene ikke så forskjellige rundt 2mmol og 4mmol L~-1. På den andre siden ser vi at den lineære modellen er feil ved 300w, den sekundærplynomiske modellen er feil ved 275w. Den tredje- og fjerdeplynomiske modellen derimot, varierer ikke mye fra hverandre.
+
+```{r}
+### laste ned nødvendige packages
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+library(exscidata)
+
+
+###laste inn data
+data("cyclingstudy")
+
+
+### Estimering av laktatterskelen og treningsintensiteten ved 4mmol L-1 
+
+cyclingstudy %>%
+  # utvalg av nødvendige kolonner i analysen.
+  select(subject, group, timepoint, lac.225:lac.375) %>%
+  # Kun ein deltaker og ett tidspunkt.
+  filter(timepoint == "pre", subject == 10) %>%
+  # lang format ved å bruke laktatkolonnene.
+  pivot_longer(names_to = "watt",
+               values_to = "lactate",
+               names_prefix = "lac.",
+               names_transform = list(watt = as.numeric),
+               cols = lac.225:lac.375) %>%
+  # Plotte data, group = subject nødvendig for å sammenkoble punktene.
+  ggplot(aes(watt, lactate, group = subject)) +
+  geom_line(lty = 2) +
+  geom_point(shape = 21, fill = "lightblue", size = 2.5) +
+  # Linjer på spesifikke punktene for 2mmol og 4mmol, samt skjeringspunktet mellom linjene.
+  geom_hline(yintercept = 4, color = "red") +
+  geom_hline(yintercept = 2, color = "gold") +
+  geom_vline(xintercept = 341.5, color = "blue") +
+  geom_vline(xintercept = 308, color = "green") +
+  # legge til en strak linje fra den lineære modelen.
+  geom_smooth(method = "lm", se = FALSE, formula = y ~ x, color = "#e41a1c") +
+  
+  # poly(x, 2) Legger til en andregradsplynomisk modell.
+  geom_smooth(method = "lm", se = FALSE, formula = y ~ poly(x, 2), color = "#377eb8") +
+  # poly(x, 3) Legger til en tredjegradsplynomisk modell.
+  geom_smooth(method = "lm", se = FALSE, formula = y ~ poly(x, 3), color = "#4daf4a") +
+  # poly(x, 4) Legger til en fjerdegradsplynomisk modell.
+  geom_smooth(method = "lm", se = FALSE, formula = y ~ poly(x, 4), color = "#ff7f00")
+
+```
+
+
+```{r}
+### vurdering av tilpasningen til de forskjellige lineære modellene på sammenhengen mellom treningsintensitet og laktatakkumulering.
+
+lactate <- cyclingstudy %>%
+  # utvalg av nødvendige kolonner i analysen.
+  select(subject, group, timepoint, lac.225:lac.375) %>%
+  # Kun ein deltaker og ett tidspunkt.
+  filter(timepoint == "pre", subject == 10) %>%
+  # lang format ved å bruke laktatkolonnene.
+  pivot_longer(names_to = "watt",
+               values_to = "lactate",
+               names_prefix = "lac.",
+               names_transform = list(watt = as.numeric),
+               cols = lac.225:lac.375) %>%
+  # Fjerne dei ugyldige veriene NA for å hindre feilmeldinger.
+  filter(!is.na(lactate))
+
+# Legger til en strak linje fra modelen.
+m1 <- lm(lactate ~ watt, data = lactate)
+
+# Legger til en andregradsplynomisk modell.
+m2 <- lm(lactate ~ poly(watt, 2, raw = TRUE), data = lactate)
+
+# Legger til en tredjegradsplynomisk modell.
+m3 <- lm(lactate ~ poly(watt, 3, raw = TRUE), data = lactate)
+
+# Legger til en fjerdegradsplynomisk modell.
+m4 <- lm(lactate ~ poly(watt, 4, raw = TRUE), data = lactate)
+
+# Lagre alle restverdiene som nye variabler.
+lactate$resid.m1 <- resid(m1)
+lactate$resid.m2 <- resid(m2)
+lactate$resid.m3 <- resid(m3)
+lactate$resid.m4 <- resid(m4)
+
+lactate %>%
+  # Samle all data fra modelleme.
+  pivot_longer(names_to = "model",
+               values_to = "residual",
+               names_prefix = "resid.",
+               names_transform = list(residual = as.numeric),
+               cols = resid.m1:resid.m4) %>%
+  # Plotte verdiene fra den observerte watten på x aksen og restverdiene på y aksen
+  ggplot(aes(watt, residual, fill = model)) + geom_point(shape = 21, size = 3) +
+  
+  # For å ha samme farger som over, bruker me scale fill manual.
+  scale_fill_manual(values = c("#e41a1c", "#377eb8", "#4daf4a", "#ff7f00"))
+```
+
+For å finne ut hva forutsatt wattverdi som er nærmest 2 og 4 mmol L-1, benytter vi koden under:
+
+``` {r}
+
+# Ny dataramme
+ndf <- data.frame(watt = seq(from = 225, to = 350, by = 0.1))
+
+ndf$predictions <- predict(m3, newdata = ndf)
+
+
+# for å finne ut kva forutsatt Wattverdi som er nermest 2 og 4 mmol L-1
+lactate_threshold <- ndf %>%
+  filter(abs(predictions - 4) == min(abs(predictions - 4)))
+
+summary(lactate_threshold)
+```
+
+Her finner vi ut av at på 2 mmol får vi en wattverdi på 311 W, mens på 4 mmol får vi en wattverdi på 343 W. Verdien for 2 mmol ligg på samme dataframe som kjem fram på 4 mmol L-1.
 
 
 ## Del 2: Forutsi størrelser på DNA fragmenter eller stiningene i en qPCR-kalibreringskurve
@@ -96,8 +215,7 @@ summary(cal)
 
 ## Del 3: Tolkning av regresjonsmodell
 
-**Introduksjon**: *Beskrive kort oppgåven/hensikten med denne delen av oppgåven slik som over. Bestemme dei to variablene vi ønsker å se på, og presentere spørsmålet mellom dei to variablene i datasettet `hypertrofi`. Kanskje vi skal kort nevne at vi vil diskutere standardfeilen, t-verdien og p-verdien knytt til regresjonstabellen som vi har laget.*
-
+### Introduksjon
 
 I denne delen av oppgaven har vi valgt å se nærmere på variablene FAST_NUCLEI_T1 og TRAINING_AGE i datasettet `hypertrofi`, som er en del av `exscidata` pakken. For utforming av tabeller, figurer og grafer bruker vi `tidyverse`, `broom` og `gt`.
 
@@ -114,11 +232,14 @@ I `?hypertrofi` er FAST_NUCLEI_T1 beskrevet som antall myonuclei per type-II mus
 
 **Spørsmålet**: Er det et lineært forhold mellom myonuclei per fiber CSA i type 2 og treningsalder? 
 
-**Metode**: *Vise og forklare fremgangsmåte i flytende tekst (unngå stikkord/punktliste). Legge til koden og vise frem regresjonstabellen*
+### Metode
 
-Under i **Graf \@ref(fig:plot-training-age-myonuclei)** er FAST_NUCLEI_T1 satt som den avhengige variabelen på y-aksen, mens TRAINING_AGE er valgt som den uavhengige variabelen på x-aksen. Grafen er ment for å gi oss et raskt overblikk av dataene. Umiddelbart så kan man se at det er et stort sprik mellom punktene, og at stigningen på den rette linjen har en liten negativt stiningstall, men er ganske nær null. Dette gir oss en viss indikasjon på at det er lite lineær sammenheng mellom variablene (en ref?).
+Under i **Plot** @fig-plot-training-age-myonuclei er FAST_NUCLEI_T1 satt som den avhengige variabelen på y-aksen, mens TRAINING_AGE er valgt som den uavhengige variabelen på x-aksen. Grafen er ment for å gi oss et raskt overblikk av dataene. 
 
-```{r, plot-training-age-myonuclei, fig.cap="Graf 1: Sammenheng mellom treningalder og myonuclei per fiber CSA i Type-II"}
+```{r}
+#| label: plot-training-age-myonuclei
+#| fig.cap: "Plott 1: Sammenheng mellom treningalder og myonuclei per fiber CSA i Type-II"
+
 # Laster inn data
 data("hypertrophy")
 
@@ -131,7 +252,7 @@ ds <- hypertrophy %>%
 ds %>% 
   ggplot(aes(TRAINING_AGE, FAST_NUCLEI_T1)) +
   geom_point(size = 2, fill = "red") +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", se = TRUE) +
   labs(
     title = "Sammenheng mellom treningserfaring og myonuklei",
     x = "Treningsår", 
@@ -139,6 +260,9 @@ ds %>%
   theme_minimal()
 ```
 
+ved hjelp av `geom_smooth` har vi lagt inn den best tilpassede linjen til datapunktene, også kalt lineær regresjonslinje (trenger ***ref***). Det gråe området omkring regresjonslinjen, visualiserer konfidensintervallet til linjen. Et bredt konfidensintervall som fremstilt her, indikerer større usikkerhet i hvordan variablene relaterer til hverandre (***ref***, Speiegel s.240-244). Dette kommer vi tilbake til senere, under "Diskusjon".
+
+For å presentere regresjonslinjen, har vi laget en lineær statistisk modell for hjelp til videre tolkning mellom forholdet av dei to variablene. Oppsummering av de statistiske parametrene som vi har valgt å fokusere på i diskusjonen vår er listet opp i tabellen under. 
 
 ``` {r, results ='asis'}
 # Lager lineær modell med ds uten NA-verdier
@@ -147,7 +271,7 @@ mod1 <- lm(FAST_NUCLEI_T1 ~ TRAINING_AGE, data = ds)
 # Henter ut koeffisienter og deres statistikker
 model_summary <- tidy(mod1)
 
-# Tilpasser p-verdier og runder av
+# Tilpasser p-verdier og runder av, og fjerner interceptet
 model_summary <- model_summary %>%
   mutate(
     term = ifelse(term == "(Intercept)", "Intercept (Konstantledd)", "Treningserfaring (år)"),
@@ -155,7 +279,11 @@ model_summary <- model_summary %>%
     estimate = round(estimate, 3),
     std.error = round(std.error, 3),
     statistic = round(statistic, 3)
-  )
+  ) %>%
+  # Filtrer ut interceptet
+  filter(term != "Intercept (Konstantledd)")
+  # Velger å filtrere ut intercept da det ikkje er aktuelt når vi kun skal se om
+  # det er en lineær sammenheng mellom dei to variablene
 
 # Lager regresjonstabell med forklarende radnavn
 regression_table <- model_summary %>%
@@ -171,7 +299,7 @@ regression_table <- model_summary %>%
   ) %>% 
   tab_header(
     title = "Resultater fra lineær regresjon",
-    subtitle = "Effekten av treningserfaring på myonuklei per fiber"
+    subtitle = "Sammenhengen mellom treningserfaring og myonuklei per fiber"
   ) %>%
   tab_source_note(
     source_note = "**Notat**: *p*-verdier mindre enn 0.05 anses som statistisk signifikante."
@@ -182,6 +310,13 @@ print(regression_table)
 
 ```
 
-**Diskusjon**: *Her kommer beskrivelsen og forklaring av standardfeilen, t-verdien og p-verdien som vi har funnet. Her benytter vi oss av pensum (Frigessi and Aalen 2018), (Campbell, Walters, and Machin 2020) og (Spiegelhalter 2019, kap 5).*
 
-*Tenker det også viktig å få inn svar på spørsmålene: "Korleis definerer og tolker man p-verdien i regresjonstabellen vår? Kva betyr den?*
+### Diskusjon
+
+I tabellen kan vi lese av verdiene for estimert koeffisient (regresjonskoeffisient), standardfeil, t-verdi og p-verdi. Den estimerte koeffisenten til "Treningserfaring (år)" forteller oss hvor mye `FAST_NUCLEI_T1` endres per enhet økning i `TRAINING_AGE`. I vårt tilfelle ser man en antall nukleikjerner per fiber reduseres med 0.008 per år med treningserfaring. Standardfeilen måler hvor mye koeffisientene er forventet å variere fra utvalg til utvalg (**ref**). Standardfeilen som vi har fått er liten i tallverdi, og man kan da fort konkludere at estimeringen er presis grunnet lav standardfeil. Samtidig er det viktig å se standardfeilen i lys av den estimerte koefisienten. I forhold til koeffisienten selv, er standardfeilen stor, og betyr at man burde være usikker på nøyaktigheten til estimatet (**ref**).
+
+*t-verdien* sier hvor mange standardavvik den estimerte koeffisienten er fra 0, der jo høyere t-verdien (enten negativ eller positiv), dess mer signifikant er koeffisienten (**ref**). Hos oss er *t-verdien* -0.104, noe som indikerer at det ikke er noe signifikant lineær sammenheng mellom `FAST_NUCLEI_T1` og `TRAINING_AGE`. 
+
+Nært knyttet til *t-verdien*, har man *p-verdien* som hjelper oss å si om *t-verdien* er statistisk signifikant (**ref**). P-verdi er sannsynligheten for å observere en så ekstrem teststatistikk som den t-verdien vi har fått, gitt antagelsen at det ikke er en sammenheng mellom variablene våre (**ref**). Basert på at p-verdien i vår modell er 0.918, er det 91,8 % sannsynlighet at man vil observere en t-verdi på -0.008. Vi har derfor ikkje tilstrekkelig bevis for å kunne si at den uavhengige variabelen `TRAINING_AGE` har en effekt på den avhengige variabelen `FAST_NUCLEI_T1`, og at det er en statistik lineær sammenheng mellom variablene (**ref**).
+
+Selv om p-verdi er et nyttig verktøy for å hjelpe oss å trekke slutninger om koeffisientenes statistiske signifikans, sier den oss ikke noe om størrelsen på en effekt eller hva praktisk betydning den kan ha (**ref**). Størrelsen på datasettet har også en betydning på p-verdien, der små datasett, som det vi har, kan gi høye p-verdier selv om det er en betydelig effekt (**ref**).
