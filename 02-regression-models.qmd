@@ -210,6 +210,9 @@ cal <- lm(log(mw) ~ dist, data = ladder)
 # Check model performance, R^2 should be ~ 1.
 summary(cal)
 
+# Estimate molecular weights from migration distances
+preds <- exp(predict(cal, newdata = unknown))
+
 
 ```
 
