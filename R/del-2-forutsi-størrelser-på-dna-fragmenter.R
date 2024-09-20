@@ -47,3 +47,4 @@ cal <- lm(log(mw) ~ dist, data = ladder)
 ## Check model performance, r^2 should be ~ 1.
 
 summary(cal)
+
