@@ -1,5 +1,7 @@
 ---
 title: "Assignment 2: Regression models, predicting from data"
+author: "Sivert Helland Veseth, Anders Nybakk, 
+        Adrian Hasum Kristiansen, Jens-Henrik Hegg"
 format: 
   html:
     code-fold: true
