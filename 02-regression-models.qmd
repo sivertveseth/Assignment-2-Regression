@@ -28,9 +28,14 @@ I våres reliabilitets tester ble det ikke utført laktat målinger, på bakgrun
 
 **Introduksjon**: *Samme som over - kort om kva arbeid vi gjorde på molekylærelab og hensikt, se pdf-fil DNA-ekstraksjon gruppe 2. Her må vi også bestemme oss for kva vi velger å fokusere på: DNA-fragmentene eller qPCR resultatene. Legge også kort til her kva informasjon dette gir oss: enten DNA vs qPCR.*
 
+I denne delen av oppgaven tar vi utgangspunkt i forsøket vi gjorde på molekylærlabben 05. - 06. september, hvor vi ekstraherte DNA fra blod. Videre forsøkte vi å isolere genene som assosieres med hurtig muskelfibersammentrekning (R/R) og langsom muskelfibersammentrekning (X/X) ved hjelp av en PCR-maskin. Prøvene herfra ble testet videre ved hjelp av elektroforese i agarose gel sammen med en DNA-stige (ladder) som brukes som markør for å kartlegge genene. Etter elektroforesene tok vi bilde av preøven slik at vi kunne observere resultatene. Stigen markerer antall hvert fetiende basebar (bp) opp til 300, og hvert 100. basepar videre til 1000bp. det dominante R/R-genet har 413bp og det ressesive X/X-genet har 318bp. De små genmolekylene med få basepar vil trenge lenger in i gelen under elektroforesen, så X/X-genet vil altså trenge lenger inn i gelen ved elektroforese. Dette kan være vanskelig å observere bare med øynene, og vil ikke være særlig nøyaktig. For å få et mer reliabelt resultat har vi derfor brukt følgende metode. Fra prøvene våre var det tre brønner som gav resultat - to med et gen, og en med to. 
+
+(her har jeg delvis brukt referanse: Henning Wackerhage: molecular exercise physiology. Vet ikke om det er nødvendig å legge til)
+
 **Metode**: *Om vi velger å analysere DNA-fragmentene så tenker eg vi følger linket veileder i oppgåveteksten, se [her](https://trainome.github.io/protocols/sw_pcr_size_determination.html). Her må vi også inkludere koden for korleis man kom frem til dei predikerte størrelsene.* *Velger vi derimot å se på helningen på kalibreringskurven, må vi bruke innsamlet data til å beregne reaksjonseffektiviteten.*
 
-**Diskusjon**: *Vise frem resultatene og snakke kva dei betyr og gir oss av informasjon. Her kan vi ogs ta med diskusjonen/konklusjonen vår fra lab-rapporten vår.*
+Først har vi brukt ImageJ Fiji for å behandle bildet vi fikk fra DNA-prøvene. Vi inverterte bildet for å få tydeligere farger, roterte det rett vei og klipte ut delen av bildet vi ville bruke - altså analysen av våre prøver. Videre brukte vi rektangelverktøyet for å markere stigen og prøvene vi ville analysere. Ut fra de markerte områdene lager ImageJ fiji grafer for hver brønn. Vi markerte toppunktene i alle grafene som indikerer gen (og trinn på stigen). Programmet registrerer plasseringen til toppunktene og disse "koordinatene" legges inn i et excell-dokument som vi bruker til beregningene.
+
 
 ```{r}
 
@@ -40,6 +45,9 @@ dat <- read_excel("data/resultat_dna_analyse.xlsx")
 
 ```
 
+For å finne ut av molekylstørrelsen til de ukjente prøvene våre må vi først kalibrere stigen. Dette gjør vi ved å lage en data.fram som vi kaller ladder. Her er tallene omvendt proposjonale ettersom det er de små molekylene som trekkes lengst inn i gelen. Denne dataframen kaller vi "ladder".
+
+Videre må vi også lage en data.fram for de ukjente variablene som vi kaller "unknown"
 
 ```{r}
 ## lage dataramme for å finne avstand og molekylærvekt
@@ -59,6 +67,8 @@ unknown <- data.frame(dist = c(258.5, 262.5, 265.5, 335.5))
 
 
 ```
+
+For å lage en kalibreringsmodell bruker vi de samme dataene i ggplot for å vise stigen. Dette brukes videre for å estimere størrelsen på de ukjente variablene. Vi valgte å bruke en bøyd graf (poly) for å få minst mulig avvik.
 
 ```{r}
 ## lage en kalibreringsmodell ved hjelp av stigen
@@ -83,6 +93,7 @@ ggplot(data = data.frame(x = c(36, 59.5, 86.5,
   scale_x_continuous(limits = c(0, 750))
 ```
 
+Til slutt brukte vi følgende koder for å estimere molekylstørrelsen på genene i prøven vår.
 
 ```{r}
 # Fit the model
@@ -92,10 +103,17 @@ cal <- lm(log(mw) ~ dist, data = ladder)
 summary(cal)
 
 # Estimate molecular weights from migration distances
-preds <- exp(predict(cal, newdata = unknown))
+preds <- exp(predict(cal, newdata = unknown)) 
 
 
 ```
+Brønn 1: 407 bp
+Brønn 2: 401 bp
+Brønn 3: 396 bp og 296 bp
+
+**Diskusjon**: *Vise frem resultatene og snakke kva dei betyr og gir oss av informasjon. Her kan vi ogs ta med diskusjonen/konklusjonen vår fra lab-rapporten vår.*
+
+Denne analysen viser at ingen av genene våre har helt riktig størelse i forhold til genene vi testet for - R/R (413bp) og X/X (318bp). Vi er likevel i nærheten som kan tyde på at allelene for brønn 1 og 2 er R/R og brønn 3 er R/X. Avviket kan forklares med unøyaktighet under DNA-testen (sansynlig ettersom validitetskontrollen i prøveresultatet ikke kom fram) og med dårlig kvalitet på bildet som vi brukte i denne oppgaven. I rapporten fra forsøket tolket vi prøvene annerledes og trodde at brønn 1, 2 og 3 alle hadde alleler litt over 300bp og at brønn 3 i tillegg hadde en feil med en ukjent allel som var på 250bp. Dette viser at det er mye unæyaktighet ved å bruke kun øynene til å tolke resultatet.
 
 ## Del 3: Tolkning av regresjonsmodell
 
