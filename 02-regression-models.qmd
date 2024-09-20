@@ -15,6 +15,8 @@ Her kan det være greit at vi legger inn litt om oppgaveteksten, se link https:/
 
 ## Del 1: Laktat terskler
 
+Laktat terskel er en variabel som er godt brukt for å forutsi prestasjon innenfor utholdenhets idretter, til å styre intensiteten av treningsøkter og evaluere trenings effekt @machado2012. Det finnes ulike metoder for å finne testpersonens laktat terskel, @machado2012 forteller oss at den "maximal-deviation method" (Dmax) anbefalt av Cheng et al. 1992, bidrar med å kunne evaluere de ulike mekanismene som virker bestemmende for prestasjon innenfor langdistanseløping og sykling. Videre hadde denne metoden en bedre korrelasjon med prestasjon og laktat terskel sammenliknet med andre metoder. 
+I våres reliabilitets tester ble det ikke utført laktat målinger, på bakgrunn av dette benytter vi oss av data settet til "cyclingstudy". De representative tersklene som blir undersøkt er 2 mmol L-1 og 4 mmol L-1. 
 *Kort introduksjon av denne delen av oppgaven. Legge kort frem korleis vi kan kalkulere laktatterskel (benytt kanskje [Machado](https://www.tandfonline.com/doi/abs/10.1080/02640414.2012.702424) og kvifor dette kan være gunstig.*
 
 **Metode**: *Her må også koden og utregningen for laktatterskelen komme frem, samt korleis vi regnet ut reliabiliteten mellom to terskler (typical error som en prosent av gj.snittet, se [Hopkins](https://link-springer-com.ezproxy.inn.no/article/10.2165/00007256-200030010-00001).Siden vi ikkje gjorde terskeltesting, så tenker eg at vi kan ta utgangspunkt i `exscidata` pakken, se filen laktatprofil-g2.xlsx for data.*
@@ -34,7 +36,7 @@ Her kan det være greit at vi legger inn litt om oppgaveteksten, se link https:/
 
 library(readxl)
 
-dat <- read_excel("resultat_dna_analyse.xlsx")
+dat <- read_excel("data/resultat_dna_analyse.xlsx")
 
 ```
 
@@ -74,7 +76,7 @@ ggplot(data = data.frame(x = c(36, 59.5, 86.5,
        aes(x, y)) + geom_point() +
   
   geom_smooth(method = "lm", formula = y ~ poly(x, 2), 
-                    color = "green", se = FALSE)
+                    color = "green", se = FALSE)+
   
   scale_y_continuous(limits = c(0, 1000)) +
   
@@ -97,13 +99,14 @@ summary(cal)
 **Introduksjon**: *Beskrive kort oppgåven/hensikten med denne delen av oppgåven slik som over. Bestemme dei to variablene vi ønsker å se på, og presentere spørsmålet mellom dei to variablene i datasettet `hypertrofi`. Kanskje vi skal kort nevne at vi vil diskutere standardfeilen, t-verdien og p-verdien knytt til regresjonstabellen som vi har laget.*
 
 
-I denne delen av oppgaven har vi valgt å se nærmere på variablene FAST_NUCLEI_T1 og TRAINING_AGE i datasettet `hypertrofi`, som er en del av `exscidata` pakken. For utforming av tabeller, figurer og grafer bruker vi `tidyverse` og `gt`.
+I denne delen av oppgaven har vi valgt å se nærmere på variablene FAST_NUCLEI_T1 og TRAINING_AGE i datasettet `hypertrofi`, som er en del av `exscidata` pakken. For utforming av tabeller, figurer og grafer bruker vi `tidyverse`, `broom` og `gt`.
 
 ```{r}
 # Laster inn nødvendige biblioteker
 library(exscidata)
 library(tidyverse)
 library(gt)
+library(broom)
 ```
 
 I `?hypertrofi` er FAST_NUCLEI_T1 beskrevet som antall myonuclei per type-II muskelfiber, mens TRAINING_AGE viser til antall år med tidligere treningserfaring. Antall myonuclei per type-II muskelfiber, kan ha noko å si om muskelens egenskap til å utvikle kraft og personers styrke (sett inn ref rfa McArdle & Catch kap 22). Det er også diskutert om trening kan føre til endringer i muskelfiber type eller om de genetiske faktorene er det som er avgjørende for muskelfiber type fordelingen til den enkelte (ref, McArdle & Catch s.535). Vi ønsker derfor å se nærmer om det er en lineær sammenheng mellom FAST_NUCLEI_T1 og TRAINING_AGE i datasettet `hypertrofi`.   
@@ -113,25 +116,71 @@ I `?hypertrofi` er FAST_NUCLEI_T1 beskrevet som antall myonuclei per type-II mus
 
 **Metode**: *Vise og forklare fremgangsmåte i flytende tekst (unngå stikkord/punktliste). Legge til koden og vise frem regresjonstabellen*
 
-Under i **Graf \@ref(fig:plot-training-age-myonuclei)** er FAST_NUCLEI_T1 satt som den avhengige variabelen på y-aksen, mens TRAINING_AGE er valgt som den uavhengige variabelen på x-aksen. Grafen er ment for å gi oss et raskt overblikk av dataene. Umiddelbart så kan man se at det er et stort sprik mellom punktene, og at stigningen på den rette linjen har en liten negativt stiningstall, men er ganske nær null. Dette gir oss en viss indikasjon på at det ikke/er lite lineær sammenheng mellom variablene (en ref?).
+Under i **Graf \@ref(fig:plot-training-age-myonuclei)** er FAST_NUCLEI_T1 satt som den avhengige variabelen på y-aksen, mens TRAINING_AGE er valgt som den uavhengige variabelen på x-aksen. Grafen er ment for å gi oss et raskt overblikk av dataene. Umiddelbart så kan man se at det er et stort sprik mellom punktene, og at stigningen på den rette linjen har en liten negativt stiningstall, men er ganske nær null. Dette gir oss en viss indikasjon på at det er lite lineær sammenheng mellom variablene (en ref?).
 
-```{r plot-training-age-myonuclei, fig.cap="Graf 1: Sammenheng mellom treningalder og myonuclei per fiber CSA i Type-II"}
+```{r, plot-training-age-myonuclei, fig.cap="Graf 1: Sammenheng mellom treningalder og myonuclei per fiber CSA i Type-II"}
 # Laster inn data
 data("hypertrophy")
 
-## Et enkelt plot for å se sammenhenger
-hypertrophy %>% 
-  select(PARTICIPANT, GROUP, TRAINING_AGE, FAST_NUCLEI_T1) %>% 
-    ggplot(aes(TRAINING_AGE, FAST_NUCLEI_T1)) +
-  geom_point(size = 2,
-             fill = "red",
-             shape = 19) +
-        labs(x = "Trenings\u00E5r", 
-             y = "Myonucklei per fiber CSA i Type II") +
-  geom_smooth(method = "lm", se = FALSE)
+# Filtrerer ut NA-verdier før du velger variabler
+ds <- hypertrophy %>%
+  filter(!is.na(TRAINING_AGE) & !is.na(FAST_NUCLEI_T1)) %>%
+  select(PARTICIPANT, GROUP, TRAINING_AGE, FAST_NUCLEI_T1)
+
+# Plotter data uten NA-verdier
+ds %>% 
+  ggplot(aes(TRAINING_AGE, FAST_NUCLEI_T1)) +
+  geom_point(size = 2, fill = "red") +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Sammenheng mellom treningserfaring og myonuklei",
+    x = "Treningsår", 
+    y = "Myonuklei per fiber CSA i Type II") +
+  theme_minimal()
 ```
 
 
+``` {r, results ='asis'}
+# Lager lineær modell med ds uten NA-verdier
+mod1 <- lm(FAST_NUCLEI_T1 ~ TRAINING_AGE, data = ds)
+
+# Henter ut koeffisienter og deres statistikker
+model_summary <- tidy(mod1)
+
+# Tilpasser p-verdier og runder av
+model_summary <- model_summary %>%
+  mutate(
+    term = ifelse(term == "(Intercept)", "Intercept (Konstantledd)", "Treningserfaring (år)"),
+    p.value = ifelse(p.value < 0.001, "< 0.001", round(p.value, 3)),
+    estimate = round(estimate, 3),
+    std.error = round(std.error, 3),
+    statistic = round(statistic, 3)
+  )
+
+# Lager regresjonstabell med forklarende radnavn
+regression_table <- model_summary %>%
+  select(term, estimate, std.error, statistic, p.value) %>%
+  gt() %>%
+  fmt_auto() %>%
+  cols_label(
+    term = "Term",
+    estimate = "Estimert koeffisient",
+    std.error = "Standardfeil",
+    statistic = md("*t*-verdi"),
+    p.value = md("*p*-verdi")
+  ) %>% 
+  tab_header(
+    title = "Resultater fra lineær regresjon",
+    subtitle = "Effekten av treningserfaring på myonuklei per fiber"
+  ) %>%
+  tab_source_note(
+    source_note = "**Notat**: *p*-verdier mindre enn 0.05 anses som statistisk signifikante."
+  )
+
+# Vis resultatene
+print(regression_table)
+
+```
 
 **Diskusjon**: *Her kommer beskrivelsen og forklaring av standardfeilen, t-verdien og p-verdien som vi har funnet. Her benytter vi oss av pensum (Frigessi and Aalen 2018), (Campbell, Walters, and Machin 2020) og (Spiegelhalter 2019, kap 5).*
 
